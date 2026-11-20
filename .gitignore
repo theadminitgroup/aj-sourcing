@@ -22,9 +22,9 @@
 .DS_Store
 *.pem
 .agents/
-MDs/
-Hero Section Video/
-Showcase/
+/MDs/
+/Hero Section Video/
+/Showcase/
 skills-lock.json
 
 # debug
