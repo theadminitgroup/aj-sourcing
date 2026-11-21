@@ -44,9 +44,10 @@ export function GlowCard({
     <Wrapper
       {...motionProps}
       className={cn(
-        "group relative overflow-hidden rounded-[24px] bg-dark-surface p-6",
+        "group relative overflow-hidden bg-dark-surface p-6",
         className
       )}
+      style={{ borderRadius: 2 }}
     >
       <div
         aria-hidden
@@ -84,9 +85,10 @@ export function GlowCardLight({
     <Wrapper
       {...motionProps}
       className={cn(
-        "group relative overflow-hidden rounded-[24px] bg-light-muted p-6",
+        "group relative overflow-hidden bg-light-muted p-6",
         className
       )}
+      style={{ borderRadius: 2 }}
     >
       <div
         aria-hidden

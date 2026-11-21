@@ -1,25 +1,31 @@
 "use client";
 
+import { BrandLogo } from "@/components/brand/logo";
 import { useContact } from "@/components/contact/contact-context";
-import { navLinks, siteConfig } from "@/lib/data";
+import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+type NavTone = "hero" | "sticky";
+
 function MobileMenu({
   open,
   onClose,
   onQuote,
+  tone,
 }: {
   open: boolean;
   onClose: () => void;
   onQuote: () => void;
+  tone: NavTone;
 }) {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[60] bg-white/95 backdrop-blur-md transition-opacity duration-300 lg:hidden",
+        "fixed inset-0 z-[60] transition-opacity duration-300 lg:hidden",
+        tone === "hero" ? "bg-[#0c1d33]/97" : "bg-white/97",
         open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       )}
     >
@@ -28,7 +34,10 @@ function MobileMenu({
           <Link
             key={link.href}
             href={link.href}
-            className="px-4 py-3 text-lg font-medium text-light-primary"
+            className={cn(
+              "px-4 py-3 text-[13px] font-normal uppercase tracking-[0.14em]",
+              tone === "hero" ? "text-white" : "text-navy"
+            )}
             onClick={onClose}
           >
             {link.label}
@@ -40,7 +49,8 @@ function MobileMenu({
             onClose();
             onQuote();
           }}
-          className="mt-6 inline-flex h-11 items-center rounded-full bg-blue px-6 text-[14px] font-semibold text-white"
+          className="mt-6 inline-flex h-11 items-center bg-blue px-6 text-[13px] font-normal uppercase tracking-[0.08em] text-white"
+          style={{ borderRadius: 2 }}
         >
           Get a Free Quote
         </button>
@@ -49,159 +59,178 @@ function MobileMenu({
   );
 }
 
-function NavLinks({ className }: { className?: string }) {
+function NavChrome({
+  tone,
+  showRule,
+  onQuote,
+  menuOpen,
+  onToggleMenu,
+}: {
+  tone: NavTone;
+  showRule: boolean;
+  onQuote: () => void;
+  menuOpen: boolean;
+  onToggleMenu: () => void;
+}) {
+  const isHero = tone === "hero";
+
   return (
-    <ul className={cn("absolute inset-x-0 hidden items-center justify-center gap-10 lg:flex", className)}>
-      {navLinks.map((link) => (
-        <li key={link.href}>
-          <Link
-            href={link.href}
-            className={cn(
-              "text-[14px] font-medium tracking-[-0.01em] transition-colors duration-200",
-              link.active
-                ? "text-light-primary"
-                : "text-[rgba(49,49,49,0.72)] hover:text-light-primary"
-            )}
+    <div className="content-width section-x mx-auto">
+      <nav className="relative flex h-[72px] items-center justify-between md:h-[80px]">
+        <Link href="/" className="relative z-10 shrink-0" aria-label="AJ Sourcing home">
+          <BrandLogo priority={isHero} />
+        </Link>
+
+        <ul className="absolute inset-x-0 hidden items-center justify-center gap-8 lg:flex xl:gap-10">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={cn(
+                  "text-[12px] font-normal uppercase tracking-[0.16em] transition-colors duration-300",
+                  isHero
+                    ? "text-white/80 hover:text-white"
+                    : "text-navy/70 hover:text-navy"
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="relative z-10 flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={onQuote}
+            className="hidden items-center bg-blue px-5 py-2.5 text-[12px] font-normal uppercase tracking-[0.12em] text-white transition-colors duration-300 hover:bg-blue/90 lg:inline-flex"
+            style={{ borderRadius: 2 }}
           >
-            {link.label}
-          </Link>
-        </li>
-      ))}
-    </ul>
+            Get a Free Quote
+          </button>
+
+          <button
+            type="button"
+            className={cn(
+              "inline-flex h-10 w-10 items-center justify-center transition-colors lg:hidden",
+              isHero
+                ? "text-white hover:bg-white/10"
+                : "text-navy hover:bg-black/[0.04]"
+            )}
+            style={{ borderRadius: 2 }}
+            onClick={onToggleMenu}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Container-width rule — hero only */}
+      {showRule && (
+        <div aria-hidden className="h-px w-full bg-white/30" />
+      )}
+    </div>
   );
 }
 
-/** In-flow nav that lives in the hero and scrolls away with it */
-export function HeroNavbar() {
+/**
+ * Hero: absolute (scrolls away) + container rule.
+ * Past hero: fixed bar slides in from top.
+ */
+export function SiteNavbar() {
   const [open, setOpen] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const [stickyIn, setStickyIn] = useState(false);
   const { openContact } = useContact();
+
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      const onScroll = () => setPastHero(window.scrollY > 48);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }
+
+    // Sticky only when the hero has fully left the viewport
+    const io = new IntersectionObserver(
+      ([entry]) => setPastHero(!entry.isIntersecting),
+      { threshold: 0, root: null, rootMargin: "0px" }
+    );
+    io.observe(hero);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!pastHero) {
+      setStickyIn(false);
+      setOpen(false);
+      return;
+    }
+    const id = requestAnimationFrame(() => setStickyIn(true));
+    return () => cancelAnimationFrame(id);
+  }, [pastHero]);
 
   return (
     <>
-      <header className="relative z-20 w-full">
-        <nav className="content-width section-x relative mx-auto flex h-[88px] items-center justify-between">
-          <Link
-            href="/"
-            className="relative z-10 shrink-0 text-[18px] font-semibold tracking-[-0.03em] text-light-primary transition-opacity hover:opacity-70"
-          >
-            {siteConfig.name}
-          </Link>
+      {/* Scrolls with the hero — not fixed */}
+      <header
+        className="absolute inset-x-0 top-0 z-50 bg-transparent"
+        inert={pastHero ? true : undefined}
+      >
+        <NavChrome
+          tone="hero"
+          showRule
+          onQuote={openContact}
+          menuOpen={open && !pastHero}
+          onToggleMenu={() => setOpen((v) => !v)}
+        />
+      </header>
 
-          <NavLinks />
-
-          <div className="relative z-10 flex shrink-0 items-center">
-            <button
-              type="button"
-              onClick={openContact}
-              className="hidden h-11 items-center rounded-full bg-blue px-6 text-[14px] font-semibold leading-none text-white transition-colors hover:bg-blue/90 lg:inline-flex"
-            >
-              Get a Free Quote
-            </button>
-
-            <button
-              type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-light-primary transition-colors hover:bg-black/[0.04] lg:hidden"
-              onClick={() => setOpen(!open)}
-              aria-label={open ? "Close menu" : "Open menu"}
-            >
-              {open ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </nav>
+      {/* Moves in after leaving the hero */}
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-white/95 backdrop-blur-md transition-transform duration-500 ease-out",
+          pastHero
+            ? stickyIn
+              ? "pointer-events-auto translate-y-0"
+              : "pointer-events-none -translate-y-full"
+            : "pointer-events-none -translate-y-full"
+        )}
+        aria-hidden={!pastHero}
+        inert={!pastHero ? true : undefined}
+      >
+        <NavChrome
+          tone="sticky"
+          showRule={false}
+          onQuote={openContact}
+          menuOpen={open && pastHero}
+          onToggleMenu={() => setOpen((v) => !v)}
+        />
       </header>
 
       <MobileMenu
         open={open}
         onClose={() => setOpen(false)}
         onQuote={openContact}
+        tone={pastHero ? "sticky" : "hero"}
       />
     </>
   );
 }
 
-/** Fixed floating nav that slides in after the hero */
+/** @deprecated Prefer SiteNavbar */
+export function HeroNavbar() {
+  return null;
+}
+
+/** @deprecated Prefer SiteNavbar */
 export function StickyNavbar() {
-  const [open, setOpen] = useState(false);
-  const [sticky, setSticky] = useState(false);
-  const { openContact } = useContact();
-
-  useEffect(() => {
-    const sentinel = document.getElementById("clients");
-    if (!sentinel) return;
-
-    const update = () => {
-      setSticky(sentinel.getBoundingClientRect().top <= 32);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!sticky) setOpen(false);
-  }, [sticky]);
-
-  return (
-    <>
-      <div
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 px-5 pt-3 md:px-6 md:pt-4",
-          "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          sticky ? "translate-y-0" : "pointer-events-none -translate-y-[120%]"
-        )}
-        aria-hidden={!sticky}
-      >
-        <header className="mx-auto w-full max-w-[var(--max-width-content)] rounded-2xl border border-black/[0.06] bg-white shadow-[0_8px_40px_rgba(0,0,0,0.14)]">
-          <nav className="relative mx-auto flex h-[64px] max-w-[var(--max-width-content)] items-center justify-between px-6 md:px-7">
-            <Link
-              href="/"
-              className="relative z-10 shrink-0 text-[18px] font-semibold tracking-[-0.03em] text-light-primary transition-opacity hover:opacity-70"
-              tabIndex={sticky ? 0 : -1}
-            >
-              {siteConfig.name}
-            </Link>
-
-            <NavLinks />
-
-            <div className="relative z-10 flex shrink-0 items-center">
-              <button
-                type="button"
-                onClick={openContact}
-                tabIndex={sticky ? 0 : -1}
-                className="hidden h-10 items-center rounded-full bg-blue px-5 text-[14px] font-semibold leading-none text-white transition-colors hover:bg-blue/90 lg:inline-flex"
-              >
-                Get a Free Quote
-              </button>
-
-              <button
-                type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-light-primary transition-colors hover:bg-black/[0.04] lg:hidden"
-                onClick={() => setOpen(!open)}
-                tabIndex={sticky ? 0 : -1}
-                aria-label={open ? "Close menu" : "Open menu"}
-              >
-                {open ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
-          </nav>
-        </header>
-      </div>
-
-      <MobileMenu
-        open={open && sticky}
-        onClose={() => setOpen(false)}
-        onQuote={openContact}
-      />
-    </>
-  );
+  return null;
 }
 
-/** @deprecated Prefer HeroNavbar + StickyNavbar */
+/** @deprecated Prefer SiteNavbar */
 export function Navbar() {
-  return <StickyNavbar />;
+  return <SiteNavbar />;
 }

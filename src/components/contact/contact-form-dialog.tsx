@@ -11,10 +11,17 @@ const fieldClass =
   "w-full rounded-[var(--radius-input)] border border-black/[0.08] bg-[#f7f7f5] px-4 py-3 text-[15px] text-light-primary outline-none transition-[border-color,box-shadow,background-color] placeholder:text-light-muted-text focus:border-blue/40 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]";
 
 export function ContactFormDialog() {
-  const { isOpen, closeContact } = useContact();
+  const { isOpen, closeContact, prefill } = useContact();
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const productDefault =
+    prefill?.product ||
+    (prefill?.category
+      ? `Looking to source: ${prefill.category}`
+      : "");
+  const formKey = `${prefill?.category ?? ""}-${prefill?.product ?? ""}-${isOpen}`;
 
   const handleClose = () => {
     closeContact();
@@ -87,19 +94,20 @@ export function ContactFormDialog() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 48 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[28px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] md:max-h-[90vh] md:max-w-[560px] md:rounded-[28px] md:shadow-[0_24px_80px_rgba(0,0,0,0.22)]"
+            className="relative z-10 flex max-h-[92dvh] w-full flex-col overflow-hidden bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] md:max-h-[90vh] md:max-w-[560px] md:shadow-[0_24px_80px_rgba(0,0,0,0.22)]"
+            style={{ borderRadius: 2 }}
           >
-            <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-black/10 md:hidden" />
+            <div className="mx-auto mt-3 h-1 w-10 shrink-0 bg-black/10 md:hidden" style={{ borderRadius: 2 }} />
 
             <div className="flex items-start justify-between gap-4 px-6 pb-2 pt-5 md:px-8 md:pt-7">
               <div>
                 <h2
                   id="contact-form-title"
-                  className="text-[22px] font-semibold tracking-[-0.02em] text-light-primary md:text-[24px]"
+                  className="text-[22px] font-normal tracking-[-0.02em] text-light-primary md:text-[24px]"
                 >
                   {submitted ? "Request received" : "Tell us what you need"}
                 </h2>
-                <p className="mt-1.5 text-[14px] leading-[1.45] text-light-secondary">
+                <p className="mt-1.5 text-[14px] font-normal leading-[1.45] text-light-secondary">
                   {submitted
                     ? "We’ll review your brief and get back within 48 hours."
                     : "Share a few details and we’ll guide you on the next step."}
@@ -108,7 +116,8 @@ export function ContactFormDialog() {
               <button
                 type="button"
                 onClick={handleClose}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black/[0.04] text-light-primary transition-colors hover:bg-black/[0.08]"
+                className="flex h-9 w-9 shrink-0 items-center justify-center bg-black/[0.04] text-light-primary transition-colors hover:bg-black/[0.08]"
+                style={{ borderRadius: 2 }}
                 aria-label="Close"
               >
                 <X size={18} />
@@ -118,29 +127,34 @@ export function ContactFormDialog() {
             <div className="overflow-y-auto px-6 pb-8 pt-4 md:px-8 md:pb-8">
               {submitted ? (
                 <div className="flex flex-col items-center py-10 text-center">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-orange/10 text-orange">
+                  <span className="flex h-14 w-14 items-center justify-center bg-orange/10 text-orange" style={{ borderRadius: 2 }}>
                     <CheckCircle2 size={28} strokeWidth={1.75} />
                   </span>
-                  <p className="mt-5 text-[16px] font-medium text-light-primary">
+                  <p className="mt-5 text-[16px] font-normal text-light-primary">
                     Thanks for reaching out
                   </p>
-                  <p className="mt-2 max-w-[32ch] text-[14px] leading-[1.5] text-light-secondary">
+                  <p className="mt-2 max-w-[32ch] text-[14px] font-normal leading-[1.5] text-light-secondary">
                     A sourcing specialist from {siteConfig.name} will contact you
                     shortly.
                   </p>
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="mt-8 inline-flex h-11 items-center rounded-full bg-blue px-6 text-[14px] font-semibold text-white transition-colors hover:bg-blue/90"
+                    className="mt-8 inline-flex h-11 items-center bg-blue px-6 text-[13px] font-normal uppercase tracking-[0.1em] text-white transition-colors hover:bg-blue/90"
+                    style={{ borderRadius: 2 }}
                   >
                     Done
                   </button>
                 </div>
               ) : (
-                <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                <form
+                  key={formKey}
+                  onSubmit={onSubmit}
+                  className="flex flex-col gap-4"
+                >
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
-                      <span className="text-[13px] font-medium text-light-primary">
+                      <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                         Full Name
                       </span>
                       <input
@@ -152,7 +166,7 @@ export function ContactFormDialog() {
                       />
                     </label>
                     <label className="flex flex-col gap-1.5">
-                      <span className="text-[13px] font-medium text-light-primary">
+                      <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                         Email
                       </span>
                       <input
@@ -167,7 +181,7 @@ export function ContactFormDialog() {
                   </div>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] font-medium text-light-primary">
+                    <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                       Company Name
                     </span>
                     <input
@@ -179,13 +193,14 @@ export function ContactFormDialog() {
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] font-medium text-light-primary">
+                    <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                       Product Requirement
                     </span>
                     <textarea
                       name="product"
                       required
                       rows={3}
+                      defaultValue={productDefault}
                       placeholder="What product do you need?"
                       className={cn(fieldClass, "resize-none")}
                     />
@@ -193,7 +208,7 @@ export function ContactFormDialog() {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
-                      <span className="text-[13px] font-medium text-light-primary">
+                      <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                         Quantity
                       </span>
                       <input
@@ -203,7 +218,7 @@ export function ContactFormDialog() {
                       />
                     </label>
                     <label className="flex flex-col gap-1.5">
-                      <span className="text-[13px] font-medium text-light-primary">
+                      <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                         Destination
                       </span>
                       <input
@@ -215,7 +230,7 @@ export function ContactFormDialog() {
                   </div>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] font-medium text-light-primary">
+                    <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                       Service Needed
                     </span>
                     <select name="service" defaultValue="" className={fieldClass}>
@@ -231,12 +246,17 @@ export function ContactFormDialog() {
                   </label>
 
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-[13px] font-medium text-light-primary">
+                    <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                       Additional Details
                     </span>
                     <textarea
                       name="details"
                       rows={3}
+                      defaultValue={
+                        prefill?.category
+                          ? `Category interest: ${prefill.category}`
+                          : undefined
+                      }
                       placeholder="Specs, target price, timeline…"
                       className={cn(fieldClass, "resize-none")}
                     />
@@ -249,7 +269,8 @@ export function ContactFormDialog() {
                   <button
                     type="submit"
                     disabled={sending}
-                    className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-blue text-[15px] font-semibold text-white transition-colors hover:bg-blue/90 disabled:opacity-70"
+                    className="mt-2 inline-flex h-12 items-center justify-center bg-blue text-[13px] font-normal uppercase tracking-[0.1em] text-white transition-colors hover:bg-blue/90 disabled:opacity-70"
+                    style={{ borderRadius: 2 }}
                   >
                     {sending ? "Sending..." : "Submit request"}
                   </button>

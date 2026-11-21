@@ -3,6 +3,7 @@
 import { siteConfig, homepageCopy } from "@/lib/data";
 import { useContact } from "@/components/contact/contact-context";
 import { QuoteButton } from "@/components/contact/quote-button";
+import { BrandLogo } from "@/components/brand/logo";
 import { FadeUp } from "@/components/ui/motion";
 import Link from "next/link";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
@@ -31,27 +32,31 @@ const footerColumns = [
     title: "Explore",
     links: [
       { label: "Home", href: "/" },
-      { label: "About us", href: "#why-us" },
       { label: "Services", href: "#services" },
-      { label: "How it works", href: "#how-it-works" },
+      { label: "How It Works", href: "#how-it-works" },
+      { label: "Shipping Terms", href: "#shipping" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "Our clients", href: "#clients" },
-      { label: "Shipping terms", href: "#shipping" },
-      { label: "Get a quote", href: "#contact" },
+      { label: "Our Clients", href: "#clients" },
+      { label: "Contact Us", href: "#contact" },
+      { label: "Get a Quote", href: "#contact" },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Use", href: "#" },
+      // Destinations do not exist yet — flagged for review
+      { label: "Privacy Policy", href: "#", pending: true },
+      { label: "Terms of Use", href: "#", pending: true },
     ],
   },
 ];
+
+const footerDescription =
+  "AJ Sourcing helps businesses worldwide source products from China, coordinate manufacturing, inspect goods, and arrange international shipping.";
 
 export function BannerFooter() {
   const { heading, subtext, primaryCta, secondaryCta } = homepageCopy.banner;
@@ -62,37 +67,60 @@ export function BannerFooter() {
       e.preventDefault();
       openContact();
     }
+    if (href === "#") {
+      e.preventDefault();
+    }
   };
 
   return (
-    <section id="contact" className="overflow-hidden bg-dark-base text-white">
-      <div className="content-width section-x border-b border-white/[0.06] pb-16 pt-16 md:pb-20 md:pt-20">
-        <FadeUp>
-          <div className="mx-auto flex max-w-[640px] flex-col items-center text-center">
-            <div className="stack-copy items-center">
-              <h2 className="heading-section-dark text-balance">{heading}</h2>
-              <p className="section-subtext-dark text-center">{subtext}</p>
-            </div>
+    <>
+      {/* Closing CTA — light identity, separate from metrics + footer */}
+      <section
+        id="contact"
+        data-surface="light"
+        className="scroll-mt-24 bg-[#F5F6F8]"
+      >
+        <div className="content-width section-x py-16 md:py-20 lg:py-24">
+          <FadeUp>
+            <div className="mx-auto flex max-w-[640px] flex-col items-center text-center">
+              <div className="stack-copy items-center">
+                <h2 className="heading-section text-balance">{heading}</h2>
+                <p className="section-subtext text-center">{subtext}</p>
+              </div>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:gap-4">
-              <QuoteButton size="lg">{primaryCta}</QuoteButton>
-              <QuoteButton variant="ghost" size="lg">
-                {secondaryCta}
-              </QuoteButton>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:gap-4">
+                <QuoteButton
+                  size="lg"
+                  className="bg-[#112947] text-white hover:bg-[#0c1d33]"
+                >
+                  {primaryCta}
+                </QuoteButton>
+                <QuoteButton
+                  variant="secondary"
+                  size="lg"
+                  className="border-[#CFD9E6] text-[#112947] hover:bg-white"
+                >
+                  {secondaryCta}
+                </QuoteButton>
+              </div>
             </div>
-          </div>
-        </FadeUp>
-      </div>
+          </FadeUp>
+        </div>
+      </section>
 
-      <footer className="section-x pb-8 pt-10 md:pb-10 md:pt-12">
+      <footer
+        className="section-x pb-8 pt-12 text-white md:pb-10 md:pt-14"
+        style={{ backgroundColor: "#112947" }}
+      >
         <div className="content-width">
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-12">
-            <div className="max-w-[280px]">
-              <p className="text-[18px] font-semibold tracking-[-0.02em] text-white">
-                {siteConfig.name}
-              </p>
-              <p className="mt-3 text-[14px] leading-[1.55] text-white/50">
-                {siteConfig.tagline}
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(3,1fr)] lg:gap-12">
+            <div className="max-w-[320px]">
+              <BrandLogo className="w-[160px] md:w-[180px]" />
+              <p
+                className="mt-4 text-[14px] leading-[1.6] text-[#CFD9E6]/75 md:text-[15px]"
+                style={{ fontWeight: 400 }}
+              >
+                {footerDescription}
               </p>
               <div className="mt-6 flex flex-wrap gap-2.5">
                 {socials.map((social) => (
@@ -106,7 +134,8 @@ export function BannerFooter() {
                         : undefined
                     }
                     aria-label={social.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.06] text-white/70 transition-colors hover:bg-white/[0.1] hover:text-white"
+                    className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#CFD9E6] transition-colors hover:border-white/30 hover:bg-white/5 hover:text-white"
+                    style={{ borderRadius: 2 }}
                   >
                     <social.icon size={15} strokeWidth={1.75} />
                   </Link>
@@ -116,7 +145,10 @@ export function BannerFooter() {
 
             {footerColumns.map((column) => (
               <div key={column.title}>
-                <p className="text-[14px] font-semibold text-white">
+                <p
+                  className="text-[12px] uppercase tracking-[0.14em] text-white/70"
+                  style={{ fontWeight: 500 }}
+                >
                   {column.title}
                 </p>
                 <ul className="mt-4 flex flex-col gap-3">
@@ -125,7 +157,8 @@ export function BannerFooter() {
                       <Link
                         href={link.href}
                         onClick={(e) => onFooterLink(e, link.href)}
-                        className="text-[14px] text-white/50 transition-colors hover:text-white"
+                        className="text-[14px] text-[#CFD9E6]/70 transition-colors hover:text-white"
+                        aria-disabled={"pending" in link && link.pending ? true : undefined}
                       >
                         {link.label}
                       </Link>
@@ -136,17 +169,17 @@ export function BannerFooter() {
             ))}
           </div>
 
-          <div className="mt-12 flex flex-col gap-3 text-[13px] text-white/40 md:mt-14 md:flex-row md:items-center md:justify-between">
+          <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-[13px] text-[#CFD9E6]/55 md:mt-14 md:flex-row md:items-center md:justify-between">
             <p>
               © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
             </p>
             <div className="flex flex-wrap gap-x-5 gap-y-1">
-              <a href={`tel:${siteConfig.phone}`} className="hover:text-white/70">
+              <a href={`tel:${siteConfig.phone}`} className="hover:text-white/80">
                 {siteConfig.phone}
               </a>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="hover:text-white/70"
+                className="hover:text-white/80"
               >
                 {siteConfig.email}
               </a>
@@ -154,6 +187,6 @@ export function BannerFooter() {
           </div>
         </div>
       </footer>
-    </section>
+    </>
   );
 }

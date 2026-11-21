@@ -1,69 +1,72 @@
 "use client";
 
 import { homepageCopy, whyUsFeatures } from "@/lib/data";
-import { LightSection } from "@/components/ui/section-shell";
-import { FadeUp, Stagger, StaggerItem } from "@/components/ui/motion";
-import {
-  ClipboardCheck,
-  MapPin,
-  MessageSquare,
-  Route,
-  type LucideIcon,
-} from "lucide-react";
-import { motion } from "framer-motion";
-
-const icons: Record<(typeof whyUsFeatures)[number]["icon"], LucideIcon> = {
-  route: Route,
-  "map-pin": MapPin,
-  message: MessageSquare,
-  clipboard: ClipboardCheck,
-};
+import { FadeUp } from "@/components/ui/motion";
+import { cn } from "@/lib/utils";
 
 export function WhyUsSection() {
-  const { heading, subtext } = homepageCopy.whyUs;
+  const { heading, subtext, brandStatement } = homepageCopy.whyUs;
 
   return (
-    <LightSection
+    <section
       id="why-us"
-      className="scroll-mt-24"
-      innerClassName="py-16 md:py-20 lg:py-24"
+      data-surface="light"
+      className="scroll-mt-24 bg-[#F5F6F8]"
     >
-      <FadeUp>
-        <div className="mx-auto max-w-[560px] stack-copy items-center text-center">
-          <h2 className="heading-section text-balance">{heading}</h2>
-          <p className="section-subtext text-center">{subtext}</p>
+      <div className="content-width section-x py-14 md:py-16 lg:py-20">
+        <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-14 xl:gap-16">
+          <FadeUp className="lg:col-span-5">
+            <div className="max-w-[420px] stack-copy">
+              <h2 className="heading-section text-balance">{heading}</h2>
+              <p className="section-subtext">{subtext}</p>
+            </div>
+            <p
+              className="mt-10 text-[32px] leading-[1.15] tracking-[-0.03em] text-[#112947] md:mt-12 md:text-[40px] lg:text-[44px]"
+              style={{ fontWeight: 500 }}
+            >
+              {brandStatement}
+            </p>
+          </FadeUp>
+
+          <FadeUp className="lg:col-span-7">
+            <ul className="list-none">
+              {whyUsFeatures.map((feature, index) => (
+                <li
+                  key={feature.number}
+                  className={cn(
+                    "group border-[#E3E7ED] py-5 transition-colors duration-200 md:py-6",
+                    index === 0 ? "border-t" : "",
+                    "border-b hover:bg-white/60"
+                  )}
+                >
+                  <div className="flex items-start gap-4 md:gap-5">
+                    <span
+                      className="shrink-0 pt-0.5 text-[13px] tracking-[0.06em] text-[#112947] md:text-[14px]"
+                      style={{ fontWeight: 500 }}
+                    >
+                      {feature.number}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h3
+                        className="text-[17px] leading-[1.3] tracking-[-0.01em] text-[#171717] transition-colors duration-200 group-hover:text-[#112947] md:text-[18px]"
+                        style={{ fontWeight: 500 }}
+                      >
+                        {feature.title}
+                      </h3>
+                      <p
+                        className="mt-2 max-w-[48ch] text-[15px] leading-[1.55] text-[#606873] md:text-[16px]"
+                        style={{ fontWeight: 400 }}
+                      >
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </FadeUp>
         </div>
-      </FadeUp>
-
-      <Stagger
-        className="mt-10 grid gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-4 lg:gap-5"
-        delay={0.06}
-        stagger={0.06}
-      >
-        {whyUsFeatures.map((feature) => {
-          const Icon = icons[feature.icon];
-
-          return (
-            <StaggerItem key={feature.title}>
-              <motion.article
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.22 }}
-                className="group flex h-full min-h-[220px] flex-col gap-5 rounded-[var(--radius-card)] bg-light-card p-6 shadow-card transition-colors duration-300 hover:bg-[#efefef] md:p-7"
-              >
-                <span className="icon-tile flex h-11 w-11 items-center justify-center bg-white text-light-primary shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.04] transition-colors duration-300 group-hover:text-orange">
-                  <Icon size={18} strokeWidth={1.75} />
-                </span>
-                <div className="stack-copy mt-auto">
-                  <h3 className="heading-card text-light-primary">
-                    {feature.title}
-                  </h3>
-                  <p className="body-muted">{feature.description}</p>
-                </div>
-              </motion.article>
-            </StaggerItem>
-          );
-        })}
-      </Stagger>
-    </LightSection>
+      </div>
+    </section>
   );
 }

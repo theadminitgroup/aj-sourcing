@@ -13,7 +13,11 @@ export function LightSection({
   innerClassName?: string;
 }) {
   return (
-    <section id={id} className={cn("bg-page text-light-primary", className)}>
+    <section
+      id={id}
+      data-surface="light"
+      className={cn("bg-page text-light-primary", className)}
+    >
       <div className={cn("content-width section-x", innerClassName)}>{children}</div>
     </section>
   );
@@ -34,6 +38,7 @@ export function DarkSection({
   return (
     <section
       id={id}
+      data-surface="dark"
       className={cn("bg-dark-base text-dark-primary", className)}
     >
       <div className={cn("content-width section-x", innerClassName)}>{children}</div>

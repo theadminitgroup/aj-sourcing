@@ -10,9 +10,15 @@ import {
   type ReactNode,
 } from "react";
 
+export type ContactPrefill = {
+  category?: string;
+  product?: string;
+};
+
 type ContactContextValue = {
   isOpen: boolean;
-  openContact: () => void;
+  prefill: ContactPrefill | null;
+  openContact: (prefill?: ContactPrefill) => void;
   closeContact: () => void;
 };
 
@@ -20,13 +26,22 @@ const ContactContext = createContext<ContactContextValue | null>(null);
 
 export function ContactProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [prefill, setPrefill] = useState<ContactPrefill | null>(null);
 
-  const openContact = useCallback(() => setIsOpen(true), []);
-  const closeContact = useCallback(() => setIsOpen(false), []);
+  const openContact = useCallback((next?: ContactPrefill) => {
+    setPrefill(next ?? null);
+    setIsOpen(true);
+  }, []);
+
+  const closeContact = useCallback(() => {
+    setIsOpen(false);
+    window.setTimeout(() => setPrefill(null), 280);
+  }, []);
 
   useEffect(() => {
     const onHash = () => {
       if (window.location.hash === "#contact") {
+        setPrefill(null);
         setIsOpen(true);
         history.replaceState(null, "", window.location.pathname + window.location.search);
       }
@@ -46,8 +61,8 @@ export function ContactProvider({ children }: { children: ReactNode }) {
   }, [isOpen]);
 
   const value = useMemo(
-    () => ({ isOpen, openContact, closeContact }),
-    [isOpen, openContact, closeContact]
+    () => ({ isOpen, prefill, openContact, closeContact }),
+    [isOpen, prefill, openContact, closeContact]
   );
 
   return (

@@ -62,10 +62,11 @@ export function TestimonialsSection() {
               <article
                 key={item.author}
                 data-story-card
-                className="group relative flex w-[min(calc(100vw-3rem),380px)] shrink-0 snap-start cursor-default flex-col justify-between rounded-[22px] bg-[#f5f5f7] p-7 min-h-[300px] transition-colors duration-300 hover:bg-[#efefef] md:w-[400px] md:p-8 md:min-h-[320px]"
+                className="group relative flex w-[min(calc(100vw-3rem),380px)] shrink-0 snap-start cursor-default flex-col justify-between bg-[#f5f5f7] p-7 min-h-[300px] transition-colors duration-300 hover:bg-[#efefef] md:w-[400px] md:p-8 md:min-h-[320px]"
+                style={{ borderRadius: 2 }}
               >
                 <div className="relative">
-                  <h3 className="text-[20px] font-semibold leading-[1.2] tracking-[-0.02em] text-light-primary md:text-[22px]">
+                  <h3 className="text-[20px] font-normal leading-[1.2] tracking-[-0.02em] text-light-primary md:text-[22px]">
                     {item.title}
                   </h3>
                   <p className="mt-3 text-[15px] leading-[1.5] text-light-secondary transition-colors duration-300 group-hover:text-light-primary/70 md:text-[16px]">
@@ -84,7 +85,7 @@ export function TestimonialsSection() {
                     />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-[14px] font-semibold text-light-primary">
+                    <p className="truncate text-[14px] font-normal text-light-primary">
                       {item.author}
                     </p>
                     <p className="truncate text-[13px] text-light-muted-text">
@@ -104,11 +105,12 @@ export function TestimonialsSection() {
             disabled={!canPrev}
             onClick={() => scrollByCard(-1)}
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200",
+              "flex h-10 w-10 items-center justify-center transition-all duration-200",
               canPrev
                 ? "bg-[#1d1d1f] text-white hover:bg-orange hover:scale-105 active:scale-[0.96]"
                 : "cursor-not-allowed bg-[#e8e8ed] text-[#aeaeb2]"
             )}
+            style={{ borderRadius: 2 }}
           >
             <ChevronLeft size={18} strokeWidth={2.25} />
           </button>
@@ -118,11 +120,12 @@ export function TestimonialsSection() {
             disabled={!canNext}
             onClick={() => scrollByCard(1)}
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200",
+              "flex h-10 w-10 items-center justify-center transition-all duration-200",
               canNext
                 ? "bg-[#1d1d1f] text-white hover:bg-orange hover:scale-105 active:scale-[0.96]"
                 : "cursor-not-allowed bg-[#e8e8ed] text-[#aeaeb2]"
             )}
+            style={{ borderRadius: 2 }}
           >
             <ChevronRight size={18} strokeWidth={2.25} />
           </button>

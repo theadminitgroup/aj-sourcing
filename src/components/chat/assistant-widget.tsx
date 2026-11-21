@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/data";
 import { chatNodes, chatWelcomeId, type ChatNode } from "@/lib/chat-flow";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Message = {
@@ -93,14 +93,15 @@ export function AssistantWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-auto flex h-[min(520px,70dvh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[22px] border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+            className="pointer-events-auto flex h-[min(520px,70dvh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+            style={{ borderRadius: 2 }}
           >
             <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] bg-[#0a0a0a] px-4 py-3.5 text-white">
               <div className="min-w-0">
-                <p className="truncate text-[14px] font-semibold tracking-[-0.01em]">
+                <p className="truncate text-[13px] font-normal uppercase tracking-[0.1em]">
                   AJ Sourcing Assistant
                 </p>
-                <p className="truncate text-[12px] text-white/55">
+                <p className="truncate text-[12px] font-normal text-white/55">
                   Guided help · usually replies instantly
                 </p>
               </div>
@@ -108,7 +109,8 @@ export function AssistantWidget() {
                 type="button"
                 aria-label="Close chat"
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+                className="flex h-8 w-8 shrink-0 items-center justify-center bg-white/10 text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+                style={{ borderRadius: 2 }}
               >
                 <X size={16} />
               </button>
@@ -128,11 +130,12 @@ export function AssistantWidget() {
                 >
                   <div
                     className={cn(
-                      "max-w-[85%] rounded-[16px] px-3.5 py-2.5 text-[13.5px] leading-[1.45]",
+                      "max-w-[85%] px-3.5 py-2.5 text-[13.5px] font-normal leading-[1.45]",
                       m.role === "user"
-                        ? "rounded-br-md bg-blue text-white"
-                        : "rounded-bl-md bg-white text-light-primary shadow-card"
+                        ? "bg-blue text-white"
+                        : "bg-white text-light-primary shadow-card"
                     )}
+                    style={{ borderRadius: 2 }}
                   >
                     {m.text}
                   </div>
@@ -147,7 +150,8 @@ export function AssistantWidget() {
                     key={reply.label}
                     type="button"
                     onClick={() => onReply(reply.label, reply.next)}
-                    className="rounded-full border border-black/[0.08] bg-[#f7f7f5] px-3 py-1.5 text-[12.5px] font-medium text-light-primary transition-colors hover:border-blue/30 hover:bg-blue/[0.06] hover:text-blue"
+                    className="border border-black/[0.08] bg-[#f7f7f5] px-3 py-1.5 text-[12px] font-normal uppercase tracking-[0.06em] text-light-primary transition-colors hover:border-blue/30 hover:bg-blue/[0.06] hover:text-blue"
+                    style={{ borderRadius: 2 }}
                   >
                     {reply.label}
                   </button>
@@ -163,9 +167,22 @@ export function AssistantWidget() {
         aria-label={open ? "Close assistant" : "Open assistant"}
         onClick={() => setOpen((v) => !v)}
         whileTap={{ scale: 0.96 }}
-        className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#0a0a0a] text-white shadow-[0_12px_32px_rgba(0,0,0,0.28)] transition-colors hover:bg-[#1a1a1a]"
+        className="pointer-events-auto flex h-14 w-14 items-center justify-center overflow-hidden bg-[#112947] text-white shadow-[0_12px_32px_rgba(17,41,71,0.28)] transition-colors duration-500 hover:bg-[#0c1d33]"
+        style={{ borderRadius: 12 }}
       >
-        {open ? <X size={22} /> : <MessageCircle size={22} strokeWidth={1.75} />}
+        {open ? (
+          <X size={22} strokeWidth={1.75} />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="/brand/mark.svg"
+            alt=""
+            width={56}
+            height={56}
+            className="pointer-events-none h-full w-full select-none object-cover"
+            draggable={false}
+          />
+        )}
       </motion.button>
     </div>
   );

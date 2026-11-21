@@ -26,7 +26,7 @@ export function FounderSection() {
 
         <FadeUp delay={0.1} className="relative mt-3 w-full max-w-[820px]">
           <blockquote>
-            <p className="text-[clamp(1.375rem,2.8vw,2rem)] font-medium leading-[1.35] tracking-[-0.02em] text-light-primary/80">
+            <p className="text-[clamp(1.375rem,2.8vw,2rem)] font-normal leading-[1.35] tracking-[-0.02em] text-light-primary/80">
               &ldquo;{founder.quote}&rdquo;
             </p>
           </blockquote>
@@ -47,10 +47,10 @@ export function FounderSection() {
               />
             </div>
             <div className="stack-copy items-center">
-              <p className="text-[22px] font-semibold leading-none text-light-primary">
+              <p className="text-[22px] font-normal leading-none text-light-primary">
                 {founder.name}
               </p>
-              <p className="text-[14px] font-medium text-light-muted-text">
+              <p className="text-[13px] font-normal uppercase tracking-[0.1em] text-light-muted-text">
                 {founder.title}
               </p>
             </div>

@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/hero";
+import { ProductShowcase } from "@/components/home/product-showcase";
 import { ClientsSection } from "@/components/home/clients";
 import { ServicesSection } from "@/components/home/services";
 import { BrandLaunchBanner } from "@/components/home/brand-launch";
@@ -12,6 +13,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <ProductShowcase />
       <ClientsSection />
       <ServicesSection />
       <BrandLaunchBanner />

@@ -3,79 +3,48 @@
 import { homepageCopy, metrics } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { FadeUp } from "@/components/ui/motion";
-import { useInView, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useRef } from "react";
 
-function useCountUp(value: number, enabled: boolean) {
-  const motionValue = useMotionValue(0);
-  const spring = useSpring(motionValue, { stiffness: 55, damping: 22 });
-  const displayRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    if (enabled) motionValue.set(value);
-  }, [enabled, motionValue, value]);
-
-  useEffect(() => {
-    return spring.on("change", (v) => {
-      if (displayRef.current) {
-        displayRef.current.textContent = String(Math.round(v));
-      }
-    });
-  }, [spring]);
-
-  return displayRef;
-}
-
-function MetricItem({
-  value,
-  suffix,
-  label,
-  accent,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-  accent?: boolean;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const displayRef = useCountUp(value, inView);
-
-  return (
-    <div ref={ref} className="flex flex-col items-center text-center">
-      <p
-        className={cn(
-          "text-[28px] font-semibold tracking-[-0.03em] md:text-[34px]",
-          accent ? "text-orange" : "text-white"
-        )}
-      >
-        <span ref={displayRef}>0</span>
-        <span className="text-[18px] md:text-[20px]">{suffix}</span>
-      </p>
-      <p className="mt-2 max-w-[14ch] text-[13px] leading-[1.4] text-white/55 md:text-[14px]">
-        {label}
-      </p>
-    </div>
-  );
-}
-
-/** Compact dark metrics banner */
+/**
+ * Compact navy metrics band — static figures (no count-up that can stick at 0).
+ */
 export function MetricsBanner() {
   const { heading, subtext } = homepageCopy.metrics;
 
   return (
-    <section id="metrics" className="bg-dark-base text-white">
-      <div className="content-width section-x py-12 md:py-14">
+    <section
+      id="metrics"
+      data-surface="dark"
+      className="text-white"
+      style={{ backgroundColor: "#112947" }}
+    >
+      <div className="content-width section-x py-10 md:py-12 lg:py-14">
         <FadeUp>
-          <div className="mx-auto mb-8 max-w-[480px] stack-copy items-center text-center md:mb-10">
+          <div className="mb-8 max-w-[480px] stack-copy md:mb-10">
             <h2 className="heading-section-dark text-balance">{heading}</h2>
-            <p className="section-subtext-dark text-center">{subtext}</p>
+            <p className="section-subtext-dark">{subtext}</p>
           </div>
         </FadeUp>
 
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-8">
           {metrics.map((m) => (
-            <MetricItem key={m.id} {...m} />
+            <div key={m.id} className="flex flex-col">
+              <p
+                className={cn(
+                  "text-[32px] leading-none tracking-[-0.03em] md:text-[40px] lg:text-[44px]",
+                  m.accent ? "text-[#F3D3A1]" : "text-white"
+                )}
+                style={{ fontWeight: 500 }}
+              >
+                {m.value}
+                <span className="text-[18px] md:text-[22px]">{m.suffix}</span>
+              </p>
+              <p
+                className="mt-2.5 max-w-[16ch] text-[13px] leading-[1.4] text-[#CFD9E6]/75 md:text-[14px]"
+                style={{ fontWeight: 400 }}
+              >
+                {m.label}
+              </p>
+            </div>
           ))}
         </div>
       </div>

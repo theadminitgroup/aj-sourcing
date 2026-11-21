@@ -1,70 +1,104 @@
 "use client";
 
 import { homepageCopy, howItWorks } from "@/lib/data";
-import { DarkSection } from "@/components/ui/section-shell";
-import { FadeUp, Stagger, StaggerItem } from "@/components/ui/motion";
-import {
-  ClipboardList,
-  PackageCheck,
-  Search,
-  Ship,
-  type LucideIcon,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { FadeUp } from "@/components/ui/motion";
 
-const stepIcons: LucideIcon[] = [ClipboardList, Search, PackageCheck, Ship];
-
+/**
+ * Connected process timeline — navy full-bleed, horizontal desktop / vertical mobile.
+ */
 export function HowItWorksSection() {
   const { heading, subtext } = homepageCopy.howItWorks;
 
   return (
-    <DarkSection
+    <section
       id="how-it-works"
-      className="scroll-mt-24"
-      innerClassName="py-16 md:py-20 lg:py-24"
+      data-surface="dark"
+      className="scroll-mt-24 py-16 md:py-20 lg:py-24"
+      style={{ backgroundColor: "#112947" }}
     >
-      <FadeUp>
-        <div className="mx-auto mb-10 max-w-[560px] stack-copy items-center text-center md:mb-14">
-          <h2 className="heading-section-dark text-balance">{heading}</h2>
-          <p className="section-subtext-dark text-center">{subtext}</p>
-        </div>
-      </FadeUp>
+      <div className="content-width section-x">
+        <FadeUp>
+          <div className="max-w-[560px] stack-copy">
+            <h2 className="heading-section-dark text-balance">{heading}</h2>
+            <p className="section-subtext-dark">{subtext}</p>
+          </div>
+        </FadeUp>
 
-      <Stagger
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
-        delay={0.08}
-        stagger={0.08}
-      >
-        {howItWorks.map((step, i) => {
-          const Icon = stepIcons[i] ?? ClipboardList;
+        {/* Desktop horizontal timeline */}
+        <FadeUp className="relative mt-14 hidden md:mt-16 md:block lg:mt-20">
+          <div
+            aria-hidden
+            className="absolute left-0 right-0 top-[18px] h-px bg-white/20"
+          />
+          <ol className="relative grid list-none grid-cols-4 gap-8 lg:gap-10">
+            {howItWorks.map((step) => (
+              <li key={step.step} className="relative pt-10">
+                <span
+                  aria-hidden
+                  className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center bg-[#112947]"
+                >
+                  <span className="h-2.5 w-2.5 rounded-full bg-white ring-[6px] ring-[#112947]" />
+                </span>
+                <p
+                  className="text-[13px] tracking-[0.08em] text-white/55"
+                  style={{ fontWeight: 500 }}
+                >
+                  {step.step}
+                </p>
+                <h3
+                  className="mt-3 text-[18px] leading-[1.3] tracking-[-0.01em] text-white lg:text-[20px]"
+                  style={{ fontWeight: 500 }}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  className="mt-2.5 max-w-[28ch] text-[15px] leading-[1.55] lg:text-[16px]"
+                  style={{ color: "#CFD9E6", fontWeight: 400 }}
+                >
+                  {step.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </FadeUp>
 
-          return (
-            <StaggerItem key={step.step}>
-              <motion.article
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.22 }}
-                className="group flex h-full min-h-[260px] flex-col gap-5 rounded-[var(--radius-card)] bg-dark-surface p-6 md:p-7"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex rounded-full bg-white/[0.06] px-3 py-1 text-[12px] font-medium text-white/55">
-                    Step {step.step}
-                  </span>
-                  <Icon
-                    size={20}
-                    className="text-white/45 transition-colors duration-300 group-hover:text-orange"
-                    strokeWidth={1.75}
-                  />
+        {/* Mobile vertical timeline */}
+        <FadeUp className="relative mt-12 md:hidden">
+          <div
+            aria-hidden
+            className="absolute bottom-2 left-[7px] top-2 w-px bg-white/20"
+          />
+          <ol className="relative list-none space-y-10">
+            {howItWorks.map((step) => (
+              <li key={step.step} className="relative flex gap-5 pl-1">
+                <span className="relative z-[1] mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center">
+                  <span className="h-2.5 w-2.5 rounded-full bg-white ring-[5px] ring-[#112947]" />
+                </span>
+                <div className="min-w-0 flex-1 pb-1">
+                  <p
+                    className="text-[12px] tracking-[0.08em] text-white/55"
+                    style={{ fontWeight: 500 }}
+                  >
+                    {step.step}
+                  </p>
+                  <h3
+                    className="mt-2 text-[17px] leading-[1.3] tracking-[-0.01em] text-white"
+                    style={{ fontWeight: 500 }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p
+                    className="mt-2 text-[15px] leading-[1.55]"
+                    style={{ color: "#CFD9E6", fontWeight: 400 }}
+                  >
+                    {step.description}
+                  </p>
                 </div>
-
-                <div className="stack-copy mt-auto">
-                  <h3 className="heading-card text-white">{step.title}</h3>
-                  <p className="body-muted-dark">{step.description}</p>
-                </div>
-              </motion.article>
-            </StaggerItem>
-          );
-        })}
-      </Stagger>
-    </DarkSection>
+              </li>
+            ))}
+          </ol>
+        </FadeUp>
+      </div>
+    </section>
   );
 }

@@ -6,20 +6,24 @@ export const siteConfig = {
   location: "Lahore, Pakistan · On-ground in China",
   whatsapp: "https://wa.me/923001234567",
   instagram: "https://instagram.com/ajsourcing",
+  heroVideo: {
+    src: "/videos/aj-hero.mp4",
+    poster: "/videos/aj-hero-poster.jpg",
+  },
 };
 
 export const navLinks = [
   { label: "Home", href: "/", active: true },
-  { label: "About us", href: "#why-us" },
+  { label: "About Us", href: "#why-us" },
   { label: "Services", href: "#services" },
-  { label: "How it works", href: "#how-it-works" },
+  { label: "How It Works", href: "#how-it-works" },
 ];
 
 export const homepageCopy = {
   hero: {
-    heading: "Import from China with confidence",
+    heading: "Import from China with confidence.",
     subtext:
-      "China import support for manufacturers, products, logistics, and delivery — all in one place.",
+      "From finding suitable manufacturers to coordinating production, quality inspections, and international shipping, AJ Sourcing helps you bring your products from China to your destination.",
     ctas: [
       { label: "Get a Free Quote", href: "#contact", variant: "primary" as const },
       { label: "Explore Services", href: "#services", variant: "secondary" as const },
@@ -33,43 +37,49 @@ export const homepageCopy = {
   services: {
     heading: "What We Do",
     subtext:
-      "We help customers source products from China, coordinate manufacturing, inspect goods, and manage shipping and delivery.",
+      "From finding manufacturers to inspecting finished goods and arranging international delivery, we coordinate the work behind your order.",
   },
   brandLaunch: {
     heading: "Starting Something New?",
     subtext:
-      "Need products for your business? We can also help connect you with support for branding, websites, development, and digital presence.",
-    primaryCta: "Explore Services",
-    primaryHref: "#services",
-    secondaryCta: "Contact Us",
+      "From sourcing your first products to building your brand, we can connect you with support for design, websites, development, and digital marketing.",
+    cta: "Let's Talk",
   },
   howItWorks: {
     heading: "How It Works",
-    subtext: "A simple process from enquiry to delivery.",
+    subtext:
+      "Four straightforward steps, from your first enquiry to the agreed delivery arrangement.",
   },
   shipping: {
     heading: "Shipping Terms",
     subtext:
-      "Choose the delivery arrangement that fits your product, destination, and level of support.",
-    note: "AJ Sourcing can coordinate road and sea freight into Pakistan, and air or sea freight internationally, subject to the destination and service arrangement.",
+      "Understand how responsibilities, shipping costs, and delivery arrangements differ when importing from China.",
+    note: "AJ Sourcing can coordinate sea and road freight between China and Pakistan, as well as international air and sea shipments, depending on the destination and requirements.",
+    disclaimer:
+      "These are international trade terms defining buyer and seller responsibilities. They do not automatically define the full scope of AJ Sourcing’s sourcing services.",
   },
   whyUs: {
-    heading: "Why Choose Us",
-    subtext: "Work with one partner from sourcing to delivery.",
+    heading: "Why AJ Sourcing?",
+    subtext:
+      "One dedicated partner to coordinate your sourcing journey and keep you informed along the way.",
+    brandStatement: "Your China Team.",
   },
   metrics: {
     heading: "By the Numbers",
-    subtext: "A quick snapshot of our experience and performance.",
+    subtext: "Our experience and operations, at a glance.",
   },
   banner: {
     heading: "Ready to Import?",
-    subtext: "Tell us what you need and we’ll guide you on the next step.",
+    subtext:
+      "Tell us what you’re looking for. We’ll help you explore sourcing options and the next steps.",
     primaryCta: "Get a Free Quote",
     secondaryCta: "Contact Us",
   },
   showcase: {
-    label: "PRODUCT SHOWCASE",
-    heading: "Products we source across industries",
+    heading: "What Can We Source?",
+    subtext:
+      "From everyday products to specialized equipment, we help businesses source across a wide range of industries.",
+    ctaLabel: "Request a Product",
   },
   founder: {
     label: "OUR STORY",
@@ -140,111 +150,151 @@ export const metrics = [
 export const services = [
   {
     id: "manufacturers",
-    icon: "factory" as const,
+    number: "01",
     title: "Manufacturer Sourcing",
     description:
-      "We help identify the right manufacturer for your product and requirements.",
+      "Find suitable manufacturers in China based on your product requirements.",
   },
   {
     id: "coordination",
-    icon: "message" as const,
-    title: "Product Coordination",
+    number: "02",
+    title: "Supplier Coordination",
     description:
-      "We manage supplier communication and keep the sourcing process moving.",
+      "We handle supplier communication and keep your order moving.",
+  },
+  {
+    id: "production",
+    number: "03",
+    title: "Production Follow-ups",
+    description:
+      "We coordinate with manufacturers and monitor production progress.",
   },
   {
     id: "inspection",
-    icon: "clipboard" as const,
+    number: "04",
     title: "Quality Inspection",
     description:
-      "We inspect goods after manufacturing to help confirm they meet the agreed requirements.",
+      "We inspect finished goods against agreed requirements before dispatch.",
   },
   {
     id: "freight",
-    icon: "ship" as const,
+    number: "05",
     title: "Freight Management",
     description:
-      "We coordinate shipping by air or sea for international destinations.",
+      "We arrange international air and sea freight, plus road transport to Pakistan where available.",
   },
   {
-    id: "pakistan",
-    icon: "truck" as const,
-    title: "Pakistan Delivery",
+    id: "customs",
+    number: "06",
+    title: "Customs & Delivery",
     description:
-      "For Pakistan, we can arrange shipment by sea or by truck depending on the order.",
-  },
-  {
-    id: "import",
-    icon: "globe" as const,
-    title: "Import Support",
-    description:
-      "We help simplify the process from sourcing to dispatch and delivery.",
+      "We coordinate customs clearance and final delivery when included in your chosen service.",
   },
 ];
 
-export const showcaseItems = [
-  { id: "auto", title: "Automobile", src: "/showcase/image-2269.png", tall: true },
-  { id: "cosmetics", title: "Cosmetics", src: "/showcase/image-2260.png", tall: false },
-  { id: "sports", title: "Sports", src: "/showcase/image-2268.png", wide: true },
-  { id: "electronics", title: "Electronics", src: "/showcase/image-2265.png", tall: true },
-  { id: "apparel", title: "Apparel", src: "/showcase/image-2259.png", tall: false },
-  { id: "home", title: "Home & Living", src: "/showcase/image-2261.png", tall: false },
-  { id: "machinery", title: "Machinery", src: "/showcase/image-2267.png", wide: true },
-  { id: "medical", title: "Medical", src: "/showcase/image-2262.png", tall: false },
-  { id: "lighting", title: "Lighting", src: "/showcase/image-2263.png", wide: true },
-  { id: "packaging", title: "Packaging", src: "/showcase/image-2266.png", tall: false },
-  { id: "tools", title: "Tools", src: "/showcase/image-2264.png", tall: false },
-  { id: "custom", title: "Custom OEM", src: "/showcase/image-2270.png", tall: false },
-];
+/** Editorial sourcing categories — transparent PNGs in /public/images/categories */
+export const sourcingCategories = [
+  {
+    id: "automotive",
+    title: "Automotive Parts & Accessories",
+    src: "/images/categories/automotive.png",
+  },
+  {
+    id: "electronics",
+    title: "Electronics & Mobile Accessories",
+    src: "/images/categories/electronics.png",
+  },
+  {
+    id: "machinery",
+    title: "Industrial Machinery & Equipment",
+    src: "/images/categories/industrial-machinery.png",
+  },
+  {
+    id: "home",
+    title: "Home & Living",
+    src: "/images/categories/home-living.png",
+  },
+  {
+    id: "packaging",
+    title: "Packaging & Materials",
+    src: "/images/categories/packaging-materials.png",
+  },
+  {
+    id: "apparel",
+    title: "Apparel & Textiles",
+    src: "/images/categories/apparel-textiles.png",
+  },
+  {
+    id: "anything",
+    title: "Anything You Need?",
+    description: "Didn't find your category? Tell us what you're looking for.",
+    cta: "Request a Product →",
+    src: "/images/categories/anything-you-need.png",
+    special: true,
+  },
+] as const;
+
+/** @deprecated Prefer sourcingCategories */
+export const showcaseItems = sourcingCategories
+  .filter((c) => "src" in c)
+  .map((c) => ({
+    id: c.id,
+    title: c.title,
+    src: (c as { src: string }).src,
+    tall: false as const,
+  }));
 
 export const whyUsFeatures = [
   {
-    icon: "route" as const,
-    title: "End-to-End Handling",
-    description: "We can support the full journey from sourcing to delivery.",
-  },
-  {
-    icon: "map-pin" as const,
-    title: "China-Based Support",
-    description: "We work close to manufacturers and suppliers in China.",
-  },
-  {
-    icon: "message" as const,
-    title: "Clear Communication",
-    description: "You stay informed with direct and practical updates.",
-  },
-  {
-    icon: "clipboard" as const,
-    title: "Goods Inspection",
+    number: "01",
+    title: "End-to-End Coordination",
     description:
-      "We inspect manufactured goods before dispatch to help reduce risk.",
+      "From finding manufacturers to arranging delivery, we coordinate the services your order needs.",
+  },
+  {
+    number: "02",
+    title: "On-the-Ground Team",
+    description:
+      "Our China-based team communicates directly with manufacturers and coordinates your requirements.",
+  },
+  {
+    number: "03",
+    title: "One Dedicated Contact",
+    description:
+      "Work with one AJ Sourcing representative throughout your order instead of dealing with multiple parties.",
+  },
+  {
+    number: "04",
+    title: "Proactive Updates",
+    description:
+      "Stay informed about manufacturing, inspections, and shipping as your order progresses.",
   },
 ];
 
 export const howItWorks = [
   {
     step: "01",
-    title: "Share Your Need",
+    title: "Share Your Requirements",
     description:
-      "Tell us what product you need, the quantity, and where it has to go.",
+      "Tell us what you need, your quantity, specifications, and destination.",
   },
   {
     step: "02",
     title: "Source & Quote",
     description:
-      "We explore suitable manufacturers and prepare the right quote.",
+      "We identify suitable manufacturers and prepare a quotation for your requirements.",
   },
   {
     step: "03",
-    title: "Inspect & Confirm",
+    title: "Produce & Inspect",
     description:
-      "We coordinate production and inspect the goods before dispatch.",
+      "We coordinate manufacturing and inspect finished goods against agreed specifications.",
   },
   {
     step: "04",
     title: "Ship & Deliver",
     description:
-      "We arrange shipping and delivery based on the selected terms.",
+      "We arrange shipping, customs, and final delivery according to your selected service.",
   },
 ];
 
@@ -292,28 +342,28 @@ export const shippingOptions = [
     code: "EXW",
     title: "Ex Works",
     description:
-      "Goods are made available at the agreed factory or location. The buyer generally takes responsibility for collection and onward transport.",
+      "Goods are made available at the agreed factory or location. The buyer generally arranges collection, export formalities, and onward transportation.",
   },
   {
     id: "fob",
     code: "FOB",
     title: "Free On Board",
     description:
-      "For sea shipments, the seller delivers the goods on board the vessel at the named port of shipment.",
+      "For sea freight, the seller delivers the goods on board the vessel at the named port of shipment. The buyer generally arranges the main freight and subsequent import arrangements.",
   },
   {
     id: "cif",
     code: "CIF",
     title: "Cost, Insurance & Freight",
     description:
-      "For sea shipments, the seller pays freight and specified insurance to the destination port, although shipment risk transfers when goods are loaded at origin.",
+      "For sea freight, the seller pays for freight and the required insurance to the destination port. Risk transfers to the buyer when the goods are loaded on board at the origin port.",
   },
   {
     id: "ddp",
     code: "DDP",
     title: "Delivered Duty Paid",
     description:
-      "The seller takes responsibility for delivery to the agreed destination, including import clearance and applicable duties.",
+      "The seller arranges delivery to the agreed destination and handles import clearance, including applicable duties and taxes. Unloading is normally the buyer's responsibility.",
   },
 ];
 
