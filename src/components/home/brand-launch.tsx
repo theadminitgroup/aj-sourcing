@@ -2,87 +2,42 @@
 
 import { homepageCopy } from "@/lib/data";
 import { QuoteButton } from "@/components/contact/quote-button";
-import { DarkBlock } from "@/components/ui/section-shell";
-import { FadeUp, HeadingReveal, Stagger, StaggerItem } from "@/components/ui/motion";
-import { ArrowRight, Globe2, Megaphone, Package } from "lucide-react";
-import { motion } from "framer-motion";
+import { ButtonLink } from "@/components/ui/button-link";
+import { FadeUp } from "@/components/ui/motion";
 
-const pillars = [
-  {
-    icon: Package,
-    title: "Product",
-    detail: "Plan, source, and produce what you’ll sell.",
-  },
-  {
-    icon: Globe2,
-    title: "Presence",
-    detail: "Website, socials, and content that look ready.",
-  },
-  {
-    icon: Megaphone,
-    title: "Growth",
-    detail: "Marketing and ads that bring customers in.",
-  },
-];
-
+/** Compact promo strip — light with soft dark tint */
 export function BrandLaunchBanner() {
-  const { label, heading, subtext, cta } = homepageCopy.brandLaunch;
+  const { heading, subtext, primaryCta, primaryHref, secondaryCta } =
+    homepageCopy.brandLaunch;
 
   return (
-    <DarkBlock id="brand-launch" className="scroll-mt-24">
-      <div className="mx-auto max-w-[720px] stack-label items-center text-center">
-        <p className="label-dark">{label}</p>
-        <div className="stack-copy items-center">
-          <HeadingReveal className="heading-section-dark text-balance">
-            {heading}
-          </HeadingReveal>
-          <FadeUp delay={0.12}>
-            <p className="max-w-[48ch] text-[15px] leading-[1.55] text-white/55 md:text-[16px]">
-              {subtext}
-            </p>
-          </FadeUp>
-        </div>
+    <section
+      id="brand-launch"
+      className="scroll-mt-24 bg-page px-4 py-6 sm:px-5 md:px-8 md:py-8 lg:px-10 xl:px-0"
+    >
+      <div className="content-width">
+        <FadeUp>
+          <div className="flex flex-col gap-5 rounded-[var(--radius-panel)] bg-[#111111] px-6 py-7 md:flex-row md:items-center md:justify-between md:gap-8 md:px-8 md:py-8">
+            <div className="max-w-[560px] stack-copy">
+              <h2 className="text-[22px] font-semibold leading-[1.25] tracking-[-0.02em] text-white md:text-[26px]">
+                {heading}
+              </h2>
+              <p className="text-[15px] leading-[1.6] text-white/60 md:text-[16px]">
+                {subtext}
+              </p>
+            </div>
+
+            <div className="flex shrink-0 flex-wrap items-center gap-3">
+              <ButtonLink href={primaryHref} variant="ghost" size="default">
+                {primaryCta}
+              </ButtonLink>
+              <QuoteButton variant="primary" size="default">
+                {secondaryCta}
+              </QuoteButton>
+            </div>
+          </div>
+        </FadeUp>
       </div>
-
-      <Stagger
-        className="mt-12 grid gap-4 md:mt-16 md:grid-cols-3 md:gap-5"
-        delay={0.1}
-        stagger={0.08}
-      >
-        {pillars.map((pillar) => (
-          <StaggerItem key={pillar.title}>
-            <motion.article
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.25 }}
-              className="group flex h-full flex-col items-center gap-4 rounded-xl bg-dark-surface px-6 py-8 text-center md:px-7 md:py-10"
-            >
-              <span className="icon-tile flex h-12 w-12 items-center justify-center bg-white/[0.05] ring-1 ring-white/10 transition-all duration-300 group-hover:scale-105 group-hover:bg-orange/15 group-hover:ring-orange/25">
-                <pillar.icon
-                  size={20}
-                  className="text-white/70 transition-colors duration-300 group-hover:text-orange"
-                  strokeWidth={1.75}
-                />
-              </span>
-              <div className="stack-copy items-center">
-                <h3 className="text-[18px] font-medium text-white">{pillar.title}</h3>
-                <p className="max-w-[22ch] text-[14px] leading-[1.5] text-white/45">
-                  {pillar.detail}
-                </p>
-              </div>
-            </motion.article>
-          </StaggerItem>
-        ))}
-      </Stagger>
-
-      <FadeUp delay={0.2} className="mt-10 flex justify-center md:mt-12">
-        <QuoteButton variant="tertiary" className="group gap-2">
-          {cta}
-          <ArrowRight
-            size={16}
-            className="transition-transform duration-200 group-hover:translate-x-0.5"
-          />
-        </QuoteButton>
-      </FadeUp>
-    </DarkBlock>
+    </section>
   );
 }

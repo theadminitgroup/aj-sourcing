@@ -19,7 +19,29 @@ export function LightSection({
   );
 }
 
-/** Full-bleed dark slab - no side white gutters */
+/** Full-bleed dark section — normal scroll, no sticky overlap */
+export function DarkSection({
+  id,
+  children,
+  className,
+  innerClassName,
+}: {
+  id?: string;
+  children: ReactNode;
+  className?: string;
+  innerClassName?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={cn("bg-dark-base text-dark-primary", className)}
+    >
+      <div className={cn("content-width section-x", innerClassName)}>{children}</div>
+    </section>
+  );
+}
+
+/** @deprecated Prefer DarkSection — kept for any legacy imports */
 export function DarkZone({
   children,
   className,
@@ -28,17 +50,13 @@ export function DarkZone({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "overflow-hidden bg-black text-white",
-        className
-      )}
-    >
+    <div className={cn("overflow-hidden bg-dark-base text-white", className)}>
       {children}
     </div>
   );
 }
 
+/** @deprecated Prefer DarkSection */
 export function DarkBlock({
   id,
   children,
@@ -51,7 +69,7 @@ export function DarkBlock({
   innerClassName?: string;
 }) {
   return (
-    <section id={id} className={cn("py-16 md:py-24 lg:py-[120px]", className)}>
+    <section id={id} className={cn("py-16 md:py-20 lg:py-24", className)}>
       <div className={cn("content-width section-x", innerClassName)}>{children}</div>
     </section>
   );

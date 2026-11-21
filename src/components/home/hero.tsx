@@ -28,7 +28,7 @@ function HeroMarqueeRow({
         {doubled.map((item, i) => (
           <div
             key={`${item.id}-${i}`}
-            className="group relative flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-[20px] bg-[#f0f0ee] md:h-[220px] md:w-[220px] lg:h-[240px] lg:w-[240px]"
+            className="group relative flex h-[180px] w-[180px] shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-panel)] bg-[#f0f0ee] md:h-[220px] md:w-[220px] lg:h-[240px] lg:w-[240px]"
           >
             <div className="relative h-[72%] w-[72%]">
               <Image
@@ -50,7 +50,7 @@ function HeroMarqueeRow({
 }
 
 export function Hero() {
-  const { badge, heading, subtext, ctas } = homepageCopy.hero;
+  const { heading, subtext, ctas } = homepageCopy.hero;
   const rowA = showcaseItems.filter((_, i) => i % 2 === 0);
   const rowB = showcaseItems.filter((_, i) => i % 2 === 1);
 
@@ -63,25 +63,19 @@ export function Hero() {
 
       <HeroNavbar />
 
-      <div className="content-width section-x relative flex flex-col items-center pb-14 pt-10 md:pb-16 md:pt-14 lg:pt-16">
+      <div className="content-width section-x relative flex flex-col items-center pb-12 pt-10 md:pb-14 md:pt-14 lg:pt-16">
         <div className="flex max-w-[920px] flex-col items-center text-center">
-          <FadeUp immediate>
-            <p className="label">{badge}</p>
-          </FadeUp>
-
-          <div className="mt-3 flex flex-col items-center gap-2">
-            <FadeUp delay={0.08} immediate>
+          <div className="flex flex-col items-center gap-3">
+            <FadeUp immediate>
               <h1 className="heading-hero text-balance">{heading}</h1>
             </FadeUp>
-            <FadeUp delay={0.16} immediate>
-              <p className="max-w-[540px] text-[15px] leading-[1.55] text-light-secondary md:text-[16px]">
-                {subtext}
-              </p>
+            <FadeUp delay={0.1} immediate>
+              <p className="section-subtext mx-auto text-center">{subtext}</p>
             </FadeUp>
           </div>
 
-          <FadeUp delay={0.28} immediate>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-4">
+          <FadeUp delay={0.22} immediate>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 md:gap-4">
               <QuoteButton size="lg">{ctas[0].label}</QuoteButton>
               <ButtonLink href={ctas[1].href} variant="secondary" size="lg">
                 {ctas[1].label}
@@ -91,11 +85,10 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Product proof - horizontal marquee (replaces video + showcase section) */}
-      <FadeUp delay={0.35} immediate>
+      <FadeUp delay={0.3} immediate>
         <div
           id="hero-showcase"
-          className="marquee-paused relative w-full space-y-4 pb-16 md:space-y-5 md:pb-20"
+          className="marquee-paused relative w-full space-y-4 pb-14 md:space-y-5 md:pb-16"
         >
           <div
             aria-hidden

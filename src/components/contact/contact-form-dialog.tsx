@@ -1,35 +1,67 @@
 "use client";
 
 import { useContact } from "@/components/contact/contact-context";
-import { siteConfig } from "@/lib/data";
+import { contactFormServices, siteConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, X } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const fieldClass =
-  "w-full rounded-xl border border-black/[0.08] bg-[#f7f7f5] px-4 py-3 text-[15px] text-light-primary outline-none transition-[border-color,box-shadow,background-color] placeholder:text-light-muted-text focus:border-blue/40 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]";
+  "w-full rounded-[var(--radius-input)] border border-black/[0.08] bg-[#f7f7f5] px-4 py-3 text-[15px] text-light-primary outline-none transition-[border-color,box-shadow,background-color] placeholder:text-light-muted-text focus:border-blue/40 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]";
 
 export function ContactFormDialog() {
   const { isOpen, closeContact } = useContact();
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleClose = () => {
     closeContact();
     window.setTimeout(() => {
       setSubmitted(false);
       setSending(false);
+      setError(null);
     }, 280);
   };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
-    window.setTimeout(() => {
-      setSending(false);
+    setError(null);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: data.get("fullName"),
+          email: data.get("email"),
+          company: data.get("company"),
+          product: data.get("product"),
+          quantity: data.get("quantity"),
+          destination: data.get("destination"),
+          service: data.get("service"),
+          details: data.get("details"),
+        }),
+      });
+
+      const json = (await res.json().catch(() => ({}))) as { error?: string };
+
+      if (!res.ok) {
+        throw new Error(json.error || "Something went wrong. Please try again.");
+      }
+
       setSubmitted(true);
-    }, 700);
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send enquiry.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -55,25 +87,22 @@ export function ContactFormDialog() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 48 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[28px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] md:max-h-[90vh] md:max-w-[520px] md:rounded-[28px] md:shadow-[0_24px_80px_rgba(0,0,0,0.22)]"
+            className="relative z-10 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[28px] bg-white shadow-[0_-8px_40px_rgba(0,0,0,0.18)] md:max-h-[90vh] md:max-w-[560px] md:rounded-[28px] md:shadow-[0_24px_80px_rgba(0,0,0,0.22)]"
           >
             <div className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-black/10 md:hidden" />
 
             <div className="flex items-start justify-between gap-4 px-6 pb-2 pt-5 md:px-8 md:pt-7">
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-orange">
-                  Free quote
-                </p>
                 <h2
                   id="contact-form-title"
-                  className="mt-1 text-[22px] font-semibold tracking-[-0.02em] text-light-primary md:text-[24px]"
+                  className="text-[22px] font-semibold tracking-[-0.02em] text-light-primary md:text-[24px]"
                 >
                   {submitted ? "Request received" : "Tell us what you need"}
                 </h2>
                 <p className="mt-1.5 text-[14px] leading-[1.45] text-light-secondary">
                   {submitted
-                    ? "We'll review your brief and get back within 48 hours."
-                    : "Share a few details and what you'd like sourced. We'll reply within 48 hours."}
+                    ? "We’ll review your brief and get back within 48 hours."
+                    : "Share a few details and we’ll guide you on the next step."}
                 </p>
               </div>
               <button
@@ -96,7 +125,8 @@ export function ContactFormDialog() {
                     Thanks for reaching out
                   </p>
                   <p className="mt-2 max-w-[32ch] text-[14px] leading-[1.5] text-light-secondary">
-                    A sourcing specialist from {siteConfig.name} will contact you shortly.
+                    A sourcing specialist from {siteConfig.name} will contact you
+                    shortly.
                   </p>
                   <button
                     type="button"
@@ -111,30 +141,16 @@ export function ContactFormDialog() {
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
                       <span className="text-[13px] font-medium text-light-primary">
-                        Full name
+                        Full Name
                       </span>
                       <input
-                        name="name"
+                        name="fullName"
                         required
                         autoComplete="name"
                         placeholder="Your name"
                         className={fieldClass}
                       />
                     </label>
-                    <label className="flex flex-col gap-1.5">
-                      <span className="text-[13px] font-medium text-light-primary">
-                        Company
-                      </span>
-                      <input
-                        name="company"
-                        autoComplete="organization"
-                        placeholder="Company name"
-                        className={fieldClass}
-                      />
-                    </label>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
                       <span className="text-[13px] font-medium text-light-primary">
                         Email
@@ -148,15 +164,51 @@ export function ContactFormDialog() {
                         className={fieldClass}
                       />
                     </label>
+                  </div>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] font-medium text-light-primary">
+                      Company Name
+                    </span>
+                    <input
+                      name="company"
+                      autoComplete="organization"
+                      placeholder="Company name"
+                      className={fieldClass}
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] font-medium text-light-primary">
+                      Product Requirement
+                    </span>
+                    <textarea
+                      name="product"
+                      required
+                      rows={3}
+                      placeholder="What product do you need?"
+                      className={cn(fieldClass, "resize-none")}
+                    />
+                  </label>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
                       <span className="text-[13px] font-medium text-light-primary">
-                        Phone
+                        Quantity
                       </span>
                       <input
-                        name="phone"
-                        type="tel"
-                        autoComplete="tel"
-                        placeholder="+92 300 0000000"
+                        name="quantity"
+                        placeholder="e.g. 1,000 units"
+                        className={fieldClass}
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5">
+                      <span className="text-[13px] font-medium text-light-primary">
+                        Destination
+                      </span>
+                      <input
+                        name="destination"
+                        placeholder="e.g. Karachi, Pakistan"
                         className={fieldClass}
                       />
                     </label>
@@ -164,16 +216,35 @@ export function ContactFormDialog() {
 
                   <label className="flex flex-col gap-1.5">
                     <span className="text-[13px] font-medium text-light-primary">
-                      What do you want us to source?
+                      Service Needed
+                    </span>
+                    <select name="service" defaultValue="" className={fieldClass}>
+                      <option value="" disabled>
+                        Select a service
+                      </option>
+                      {contactFormServices.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="flex flex-col gap-1.5">
+                    <span className="text-[13px] font-medium text-light-primary">
+                      Additional Details
                     </span>
                     <textarea
-                      name="sourcing"
-                      required
-                      rows={4}
-                      placeholder="Product type, quantity, target price, destination..."
+                      name="details"
+                      rows={3}
+                      placeholder="Specs, target price, timeline…"
                       className={cn(fieldClass, "resize-none")}
                     />
                   </label>
+
+                  {error && (
+                    <p className="text-[13px] leading-[1.4] text-red-600">{error}</p>
+                  )}
 
                   <button
                     type="submit"

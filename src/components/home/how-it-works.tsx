@@ -1,72 +1,70 @@
 "use client";
 
 import { homepageCopy, howItWorks } from "@/lib/data";
-import { DarkBlock } from "@/components/ui/section-shell";
-import { HeadingReveal, Stagger, StaggerItem } from "@/components/ui/motion";
-import { ArrowRight, ClipboardList, PackageCheck, Search } from "lucide-react";
+import { DarkSection } from "@/components/ui/section-shell";
+import { FadeUp, Stagger, StaggerItem } from "@/components/ui/motion";
+import {
+  ClipboardList,
+  PackageCheck,
+  Search,
+  Ship,
+  type LucideIcon,
+} from "lucide-react";
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
 
-const stepIcons: LucideIcon[] = [ClipboardList, Search, PackageCheck];
+const stepIcons: LucideIcon[] = [ClipboardList, Search, PackageCheck, Ship];
 
 export function HowItWorksSection() {
-  const { label, heading } = homepageCopy.howItWorks;
+  const { heading, subtext } = homepageCopy.howItWorks;
 
   return (
-    <DarkBlock id="how-it-works">
-      <div className="stack-label mb-[60px] items-center text-center">
-        <p className="label-dark">{label}</p>
-        <HeadingReveal className="heading-section-dark mx-auto max-w-[18ch] text-balance">
-          {heading}
-        </HeadingReveal>
-      </div>
+    <DarkSection
+      id="how-it-works"
+      className="scroll-mt-24"
+      innerClassName="py-16 md:py-20 lg:py-24"
+    >
+      <FadeUp>
+        <div className="mx-auto mb-10 max-w-[560px] stack-copy items-center text-center md:mb-14">
+          <h2 className="heading-section-dark text-balance">{heading}</h2>
+          <p className="section-subtext-dark text-center">{subtext}</p>
+        </div>
+      </FadeUp>
 
       <Stagger
-        className="flex flex-col items-stretch gap-4 md:flex-row md:items-stretch md:gap-3"
-        delay={0.12}
-        stagger={0.1}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
+        delay={0.08}
+        stagger={0.08}
       >
         {howItWorks.map((step, i) => {
           const Icon = stepIcons[i] ?? ClipboardList;
 
           return (
-            <div key={step.step} className="contents">
-              <StaggerItem className="flex-1">
-                <motion.article
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.25 }}
-                  className="group card-p flex h-full min-h-[320px] flex-col gap-6 rounded-xl bg-dark-surface"
-                >
-                  <span className="inline-flex w-fit rounded-full bg-white/[0.06] px-3 py-1 text-[12px] font-medium text-white/55 transition-colors group-hover:bg-white/[0.1] group-hover:text-white/70">
+            <StaggerItem key={step.step}>
+              <motion.article
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.22 }}
+                className="group flex h-full min-h-[260px] flex-col gap-5 rounded-[var(--radius-card)] bg-dark-surface p-6 md:p-7"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex rounded-full bg-white/[0.06] px-3 py-1 text-[12px] font-medium text-white/55">
                     Step {step.step}
                   </span>
-
-                  <div className="flex min-h-[120px] items-center justify-center rounded-2xl bg-[#1a1a1a]">
-                    <Icon
-                      size={32}
-                      className="text-white/70 transition-colors duration-300 group-hover:text-orange"
-                      strokeWidth={1.5}
-                    />
-                  </div>
-
-                  <div className="stack-copy mt-auto">
-                    <h3 className="heading-card text-white">{step.title}</h3>
-                    <p className="body-muted-dark">{step.description}</p>
-                  </div>
-                </motion.article>
-              </StaggerItem>
-
-              {i < howItWorks.length - 1 && (
-                <div aria-hidden className="hidden shrink-0 items-center self-center md:flex">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.06]">
-                    <ArrowRight size={14} className="text-white/45" />
-                  </span>
+                  <Icon
+                    size={20}
+                    className="text-white/45 transition-colors duration-300 group-hover:text-orange"
+                    strokeWidth={1.75}
+                  />
                 </div>
-              )}
-            </div>
+
+                <div className="stack-copy mt-auto">
+                  <h3 className="heading-card text-white">{step.title}</h3>
+                  <p className="body-muted-dark">{step.description}</p>
+                </div>
+              </motion.article>
+            </StaggerItem>
           );
         })}
       </Stagger>
-    </DarkBlock>
+    </DarkSection>
   );
 }

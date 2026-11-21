@@ -126,11 +126,11 @@ export function StickyNavbar() {
   const { openContact } = useContact();
 
   useEffect(() => {
-    const why = document.getElementById("why-us");
-    if (!why) return;
+    const sentinel = document.getElementById("clients");
+    if (!sentinel) return;
 
     const update = () => {
-      setSticky(why.getBoundingClientRect().top <= 32);
+      setSticky(sentinel.getBoundingClientRect().top <= 32);
     };
 
     update();

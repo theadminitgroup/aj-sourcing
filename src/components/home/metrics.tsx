@@ -2,9 +2,8 @@
 
 import { homepageCopy, metrics } from "@/lib/data";
 import { cn } from "@/lib/utils";
-import { FadeUp, HeadingReveal } from "@/components/ui/motion";
-import { useInView, useMotionValue, useSpring, motion } from "framer-motion";
-import { Globe2, Package } from "lucide-react";
+import { FadeUp } from "@/components/ui/motion";
+import { useInView, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 function useCountUp(value: number, enabled: boolean) {
@@ -27,145 +26,57 @@ function useCountUp(value: number, enabled: boolean) {
   return displayRef;
 }
 
-function MetricCard({
+function MetricItem({
   value,
   suffix,
   label,
-  className,
+  accent,
 }: {
   value: number;
   suffix: string;
   label: string;
-  className?: string;
+  accent?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-40px" });
   const displayRef = useCountUp(value, inView);
 
   return (
-    <motion.div
-      ref={ref}
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.22 }}
-      className={cn(
-        "flex h-full min-h-[160px] flex-col justify-between rounded-[20px] bg-[#f3f3f1] p-6 md:min-h-[200px] md:p-7",
-        className
-      )}
-    >
-      <p className="text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-none tracking-[-0.04em] text-light-primary">
+    <div ref={ref} className="flex flex-col items-center text-center">
+      <p
+        className={cn(
+          "text-[28px] font-semibold tracking-[-0.03em] md:text-[34px]",
+          accent ? "text-orange" : "text-white"
+        )}
+      >
         <span ref={displayRef}>0</span>
-        <span>{suffix}</span>
+        <span className="text-[18px] md:text-[20px]">{suffix}</span>
       </p>
-      <p className="max-w-[18ch] text-[14px] font-medium leading-[1.4] text-light-secondary">
+      <p className="mt-2 max-w-[14ch] text-[13px] leading-[1.4] text-white/55 md:text-[14px]">
         {label}
       </p>
-    </motion.div>
+    </div>
   );
 }
 
-function AccentMetricCard({
-  value,
-  suffix,
-  label,
-}: {
-  value: number;
-  suffix: string;
-  label: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const displayRef = useCountUp(value, inView);
+/** Compact dark metrics banner */
+export function MetricsBanner() {
+  const { heading, subtext } = homepageCopy.metrics;
 
   return (
-    <motion.div
-      ref={ref}
-      whileHover={{ y: -3 }}
-      transition={{ duration: 0.22 }}
-      className="relative flex h-full min-h-[280px] flex-col justify-between overflow-hidden rounded-[20px] bg-[#fff1e8] p-6 md:min-h-0 md:p-7"
-    >
-      <div>
-        <p className="text-[clamp(2.25rem,4vw,3.5rem)] font-semibold leading-none tracking-[-0.04em] text-light-primary">
-          <span ref={displayRef}>0</span>
-          <span>{suffix}</span>
-        </p>
-        <p className="mt-3 max-w-[16ch] text-[14px] font-medium leading-[1.4] text-light-secondary">
-          {label}
-        </p>
-      </div>
-
-      <div aria-hidden className="relative mt-8 flex h-28 items-end justify-end">
-        <span className="float-soft absolute bottom-2 right-16 flex h-14 w-14 items-center justify-center rounded-full bg-orange/10">
-          <Globe2 className="text-orange" size={22} />
-        </span>
-        <span
-          className="float-soft absolute bottom-6 right-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange/15"
-          style={{ animationDelay: "0.6s" }}
-        >
-          <Package className="text-orange" size={24} />
-        </span>
-      </div>
-    </motion.div>
-  );
-}
-
-export function MetricsSection() {
-  const { label, heading } = homepageCopy.metrics;
-  const [years, orders, quote, ontime, partners] = metrics;
-
-  return (
-    <section id="metrics" className="bg-white py-16 md:py-20 lg:py-24">
-      <div className="content-width section-x">
-        <div className="stack-label mb-10 max-w-[560px] md:mb-12">
-          <FadeUp>
-            <p className="label">{label}</p>
-          </FadeUp>
-          <HeadingReveal className="heading-section text-balance">{heading}</HeadingReveal>
-        </div>
-
-        {/* Mobile stack */}
-        <div className="grid gap-3 md:hidden">
-          {metrics.map((m) =>
-            m.accent ? (
-              <AccentMetricCard key={m.id} {...m} />
-            ) : (
-              <MetricCard key={m.id} {...m} />
-            )
-          )}
-        </div>
-
-        {/* Desktop bento */}
-        <div className="hidden h-[clamp(380px,42vw,480px)] grid-cols-3 gap-3 md:grid">
-          <div className="flex min-h-0 flex-col gap-3">
-            {years && (
-              <div className="min-h-0 flex-[1.1]">
-                <MetricCard {...years} className="h-full" />
-              </div>
-            )}
-            {orders && (
-              <div className="min-h-0 flex-[0.9]">
-                <MetricCard {...orders} className="h-full" />
-              </div>
-            )}
+    <section id="metrics" className="bg-dark-base text-white">
+      <div className="content-width section-x py-12 md:py-14">
+        <FadeUp>
+          <div className="mx-auto mb-8 max-w-[480px] stack-copy items-center text-center md:mb-10">
+            <h2 className="heading-section-dark text-balance">{heading}</h2>
+            <p className="section-subtext-dark text-center">{subtext}</p>
           </div>
+        </FadeUp>
 
-          <div className="flex min-h-0 flex-col gap-3">
-            {quote && (
-              <div className="min-h-0 flex-1">
-                <MetricCard {...quote} className="h-full" />
-              </div>
-            )}
-            {ontime && (
-              <div className="h-[140px] shrink-0 lg:h-[160px]">
-                <MetricCard {...ontime} className="h-full !min-h-0" />
-              </div>
-            )}
-          </div>
-
-          {partners && (
-            <div className="min-h-0">
-              <AccentMetricCard {...partners} />
-            </div>
-          )}
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-6">
+          {metrics.map((m) => (
+            <MetricItem key={m.id} {...m} />
+          ))}
         </div>
       </div>
     </section>

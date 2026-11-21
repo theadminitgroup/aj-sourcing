@@ -4,53 +4,72 @@ export const siteConfig = {
   email: "hello@ajsourcing.com",
   phone: "+92 300 123 4567",
   location: "Lahore, Pakistan · On-ground in China",
+  whatsapp: "https://wa.me/923001234567",
+  instagram: "https://instagram.com/ajsourcing",
 };
 
 export const navLinks = [
   { label: "Home", href: "/", active: true },
-  { label: "About us", href: "#founder" },
+  { label: "About us", href: "#why-us" },
   { label: "Services", href: "#services" },
   { label: "How it works", href: "#how-it-works" },
 ];
 
 export const homepageCopy = {
   hero: {
-    badge: "Your trusted sourcing partner",
     heading: "Import from China with confidence",
     subtext:
-      "One platform for every import. We find suppliers, verify quality, and deliver worldwide so you can scale without the risk.",
+      "China import support for manufacturers, products, logistics, and delivery — all in one place.",
     ctas: [
       { label: "Get a Free Quote", href: "#contact", variant: "primary" as const },
       { label: "Explore Services", href: "#services", variant: "secondary" as const },
     ],
   },
-  metrics: {
-    label: "BY THE NUMBERS",
-    heading: "Results you can measure.",
+  clients: {
+    heading: "Trusted by Businesses",
+    subtext:
+      "Companies across industries rely on AJ Sourcing for product sourcing and import support from China.",
   },
   services: {
-    label: "OUR SERVICES",
-    heading: "Everything you need to import, in one place",
+    heading: "What We Do",
+    subtext:
+      "We help customers source products from China, coordinate manufacturing, inspect goods, and manage shipping and delivery.",
   },
   brandLaunch: {
-    label: "NEW BUSINESS LAUNCH",
-    heading: "Starting a business? We build it with you.",
+    heading: "Starting Something New?",
     subtext:
-      "One team for the plan, first products, website, socials, and ads, so you can launch and grow without juggling partners.",
-    cta: "Start my launch",
-    href: "#contact",
+      "Need products for your business? We can also help connect you with support for branding, websites, development, and digital presence.",
+    primaryCta: "Explore Services",
+    primaryHref: "#services",
+    secondaryCta: "Contact Us",
+  },
+  howItWorks: {
+    heading: "How It Works",
+    subtext: "A simple process from enquiry to delivery.",
+  },
+  shipping: {
+    heading: "Shipping Terms",
+    subtext:
+      "Choose the delivery arrangement that fits your product, destination, and level of support.",
+    note: "For Pakistan, we can arrange shipment by sea or truck. For most other destinations, we arrange shipping by sea or air.",
+  },
+  whyUs: {
+    heading: "Why Choose Us",
+    subtext: "Work with one partner from sourcing to delivery.",
+  },
+  metrics: {
+    heading: "By the Numbers",
+    subtext: "A quick snapshot of our experience and performance.",
+  },
+  banner: {
+    heading: "Ready to Import?",
+    subtext: "Tell us what you need and we’ll guide you on the next step.",
+    primaryCta: "Get a Free Quote",
+    secondaryCta: "Contact Us",
   },
   showcase: {
     label: "PRODUCT SHOWCASE",
     heading: "Products we source across industries",
-  },
-  whyUs: {
-    label: "WHY AJ SOURCING",
-    heading: "Built on trust. Made for importers.",
-  },
-  howItWorks: {
-    label: "HOW IT WORKS",
-    heading: "A simple process, from inquiry to delivery",
   },
   founder: {
     label: "OUR STORY",
@@ -59,29 +78,25 @@ export const homepageCopy = {
     label: "TESTIMONIALS",
     heading: "Trusted by businesses that import to grow",
   },
-  banner: {
-    label: "GET STARTED",
-    heading: "Ready to import with one partner?",
-    subtext:
-      "Whether it's your first container or your fiftieth SKU, tell us what you need. We'll handle the rest.",
-    cards: [
-      {
-        title: "Start a Project",
-        description: "Share your product brief. Get a free quote within 24 hours.",
-        cta: "Get a Free Quote",
-        href: "#contact",
-        primary: true,
-      },
-      {
-        title: "Explore Services",
-        description:
-          "Sourcing, brand launch, website, socials, and ads. See the full stack.",
-        cta: "Explore Services",
-        href: "#services",
-        primary: false,
-      },
-    ],
+};
+
+/** Legacy — not shown on the reordered homepage */
+export const testimonials = [
+  {
+    title: "Supply chain we can trust",
+    quote:
+      "AJ Sourcing scaled our auto catalog with verified factories and consistent QC.",
+    author: "Apex Autodrome",
+    role: "Automotive parts",
   },
+];
+
+/** Legacy — not shown on the reordered homepage */
+export const founder = {
+  name: "Ahmad Amir",
+  title: "Founder & CEO",
+  quote:
+    "Our job isn't just to find the cheapest supplier. It's to find the right one, verify quality, and get it to your door without surprises.",
 };
 
 export const metrics = [
@@ -124,46 +139,46 @@ export const metrics = [
 
 export const services = [
   {
-    id: "suppliers",
-    icon: "shield-check" as const,
-    title: "Verified suppliers",
+    id: "manufacturers",
+    icon: "factory" as const,
+    title: "Manufacturer Sourcing",
     description:
-      "Every factory is audited before you see them, so you never gamble on an unverified manufacturer.",
+      "We help identify the right manufacturer for your product and requirements.",
   },
   {
-    id: "global",
-    icon: "globe" as const,
-    title: "Global product sourcing",
+    id: "coordination",
+    icon: "message" as const,
+    title: "Product Coordination",
     description:
-      "From Guangzhou to Yiwu, we match your specs, MOQ, and budget to the right factory.",
+      "We manage supplier communication and keep the sourcing process moving.",
   },
   {
     id: "inspection",
     icon: "clipboard" as const,
-    title: "Quality inspection",
+    title: "Quality Inspection",
     description:
-      "Pre-shipment QC with photo and video reports. Catch issues before goods leave China.",
+      "We inspect goods after manufacturing to help confirm they meet the agreed requirements.",
   },
   {
-    id: "messaging",
-    icon: "message" as const,
-    title: "Supplier communication",
+    id: "freight",
+    icon: "ship" as const,
+    title: "Freight Management",
     description:
-      "We speak the language, manage samples, and keep production updates clear so you stay in control.",
+      "We coordinate shipping by air or sea for international destinations.",
   },
   {
-    id: "logistics",
+    id: "pakistan",
     icon: "truck" as const,
-    title: "End-to-end logistics",
+    title: "Pakistan Delivery",
     description:
-      "Freight, customs coordination, and door-to-door delivery. One timeline, one partner.",
+      "For Pakistan, we can arrange shipment by sea or by truck depending on the order.",
   },
   {
-    id: "quotes",
-    icon: "scale" as const,
-    title: "Transparent quote comparison",
+    id: "import",
+    icon: "globe" as const,
+    title: "Import Support",
     description:
-      "Side-by-side factory pricing with clear breakdowns, so you choose with confidence, not guesswork.",
+      "We help simplify the process from sourcing to dispatch and delivery.",
   },
 ];
 
@@ -184,80 +199,131 @@ export const showcaseItems = [
 
 export const whyUsFeatures = [
   {
-    icon: "network" as const,
-    title: "Trusted supplier network",
-    description:
-      "Audited factories we stand behind, not random Alibaba listings.",
+    icon: "route" as const,
+    title: "End-to-End Handling",
+    description: "We can support the full journey from sourcing to delivery.",
   },
   {
     icon: "map-pin" as const,
-    title: "On-the-ground team in China",
-    description:
-      "Local eyes in Guangzhou, Shenzhen, and Yiwu, on the factory floor for you.",
+    title: "China-Based Support",
+    description: "We work close to manufacturers and suppliers in China.",
   },
   {
-    icon: "zap" as const,
-    title: "Clear communication",
+    icon: "message" as const,
+    title: "Clear Communication",
+    description: "You stay informed with direct and practical updates.",
+  },
+  {
+    icon: "clipboard" as const,
+    title: "Goods Inspection",
     description:
-      "Honest pricing, real timelines, proactive updates. No surprises mid-shipment.",
+      "We inspect manufactured goods before dispatch to help reduce risk.",
   },
 ];
 
 export const howItWorks = [
   {
     step: "01",
-    title: "Tell us what you need",
+    title: "Share Your Need",
     description:
-      "Share specs, quantity, target price, and destination. We reply with a clear plan within 48 hours.",
+      "Tell us what product you need, the quantity, and where it has to go.",
   },
   {
     step: "02",
-    title: "We find & verify suppliers",
+    title: "Source & Quote",
     description:
-      "Our China team shortlists factories, negotiates factory-direct pricing, and sends transparent quotes.",
+      "We explore suitable manufacturers and prepare the right quote.",
   },
   {
     step: "03",
-    title: "Inspect, produce & deliver",
+    title: "Inspect & Confirm",
     description:
-      "QC checks, production tracking, and global logistics, from factory floor to your warehouse.",
+      "We coordinate production and inspect the goods before dispatch.",
+  },
+  {
+    step: "04",
+    title: "Ship & Deliver",
+    description:
+      "We arrange shipping and delivery based on the selected terms.",
   },
 ];
 
-export const testimonials = [
+export const clients = [
   {
-    title: "Supply chain we can trust",
-    quote:
-      "AJ Sourcing scaled our auto catalog with verified factories and consistent QC. Our import pipeline has never been this reliable.",
-    author: "Apex Autodrome",
-    role: "Automotive parts",
+    id: "apex",
+    name: "Apex Autodrome",
+    logo: "/clients/apex-autodrome.svg",
   },
   {
-    title: "One partner, zero chaos",
-    quote:
-      "From inquiry to delivery, they handled every detail. Transparent pricing and on-ground support made importing feel simple.",
-    author: "AFJA Trading Limited",
-    role: "International trading",
+    id: "afja",
+    name: "AFJA Trading Limited",
+    logo: "/clients/afja-trading.svg",
   },
   {
-    title: "Quality before shipment",
-    quote:
-      "They matched us with the right manufacturers immediately. Pre-shipment inspections gave us full confidence before goods left China.",
-    author: "F & A Sourcing Limited",
-    role: "Product procurement",
+    id: "fa",
+    name: "F & A Sourcing Limited",
+    logo: "/clients/fa-sourcing.svg",
   },
   {
-    title: "A partner that scales with us",
-    quote:
-      "Clear communication and dependable timelines. We treat AJ Sourcing as an extension of our operations team.",
-    author: "Growth Partner",
-    role: "Brand importer",
+    id: "jd",
+    name: "JD Trading Company",
+    logo: "/clients/jd-trading.svg",
+  },
+  {
+    id: "pause",
+    name: "Pause It",
+    logo: "/clients/pause-it.svg",
+  },
+  {
+    id: "protect",
+    name: "Protect It",
+    logo: "/clients/protect-it.svg",
+  },
+  {
+    id: "bare",
+    name: "The Bare Edit",
+    logo: "/clients/the-bare-edit.svg",
   },
 ];
 
-export const founder = {
-  name: "Ahmad Amir",
-  title: "Founder & CEO",
-  quote:
-    "Our job isn't just to find the cheapest supplier. It's to find the right one, verify quality, and get it to your door without surprises.",
-};
+export const shippingOptions = [
+  {
+    id: "exw",
+    code: "EXW",
+    title: "Ex Works",
+    description:
+      "Factory pickup only. Goods are collected from the manufacturer’s location.",
+  },
+  {
+    id: "fob",
+    code: "FOB",
+    title: "Free On Board",
+    description:
+      "The supplier delivers the goods to the port and loads them for export shipment.",
+  },
+  {
+    id: "cif",
+    code: "CIF",
+    title: "Cost, Insurance & Freight",
+    description:
+      "The supplier covers freight and insurance up to the destination port.",
+  },
+  {
+    id: "ddp",
+    code: "DDP",
+    title: "Delivered Duty Paid",
+    description:
+      "Door-to-door delivery with duties and taxes included where applicable.",
+  },
+];
+
+export const contactFormServices = [
+  "Manufacturer Sourcing",
+  "Product Coordination",
+  "Quality Inspection",
+  "Freight Management",
+  "Pakistan Delivery",
+  "Import Support",
+  "New Business Launch",
+  "Other",
+];
