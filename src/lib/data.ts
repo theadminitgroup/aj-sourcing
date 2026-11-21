@@ -51,7 +51,7 @@ export const homepageCopy = {
     heading: "Shipping Terms",
     subtext:
       "Choose the delivery arrangement that fits your product, destination, and level of support.",
-    note: "For Pakistan, we can arrange shipment by sea or truck. For most other destinations, we arrange shipping by sea or air.",
+    note: "AJ Sourcing can coordinate road and sea freight into Pakistan, and air or sea freight internationally, subject to the destination and service arrangement.",
   },
   whyUs: {
     heading: "Why Choose Us",
@@ -292,28 +292,28 @@ export const shippingOptions = [
     code: "EXW",
     title: "Ex Works",
     description:
-      "Factory pickup only. Goods are collected from the manufacturer’s location.",
+      "Goods are made available at the agreed factory or location. The buyer generally takes responsibility for collection and onward transport.",
   },
   {
     id: "fob",
     code: "FOB",
     title: "Free On Board",
     description:
-      "The supplier delivers the goods to the port and loads them for export shipment.",
+      "For sea shipments, the seller delivers the goods on board the vessel at the named port of shipment.",
   },
   {
     id: "cif",
     code: "CIF",
     title: "Cost, Insurance & Freight",
     description:
-      "The supplier covers freight and insurance up to the destination port.",
+      "For sea shipments, the seller pays freight and specified insurance to the destination port, although shipment risk transfers when goods are loaded at origin.",
   },
   {
     id: "ddp",
     code: "DDP",
     title: "Delivered Duty Paid",
     description:
-      "Door-to-door delivery with duties and taxes included where applicable.",
+      "The seller takes responsibility for delivery to the agreed destination, including import clearance and applicable duties.",
   },
 ];
 
