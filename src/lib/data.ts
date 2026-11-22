@@ -405,12 +405,10 @@ export const shippingOptions = [
 ];
 
 export const contactFormServices = [
-  "Manufacturer Sourcing",
-  "Product Coordination",
-  "Quality Inspection",
-  "Freight Management",
-  "Pakistan Delivery",
-  "Import Support",
+  "Product Sourcing & Manufacturing",
+  "Production & Quality Inspection",
+  "Shipping & Import Logistics",
+  "Complete Sourcing Support",
   "New Business Launch",
-  "Other",
+  "Other / Not Sure Yet",
 ];
