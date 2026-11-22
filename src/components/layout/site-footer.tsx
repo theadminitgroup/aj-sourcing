@@ -11,15 +11,6 @@ const socialLinks = [
   { label: "Email", href: `mailto:${siteConfig.email}` },
 ];
 
-const footerNav = [
-  ...navLinks.map(({ label, href }) => ({ label, href })),
-  { label: "What We Source", href: "/#products" },
-  { label: "Shipping Terms", href: "/#shipping" },
-  { label: "Why AJ Sourcing", href: "/#why-us" },
-  { label: "Privacy Policy", href: "/privacy-policy" },
-  { label: "Terms of Service", href: "/terms-of-service" },
-];
-
 const offices = [
   {
     title: "Hong Kong",
@@ -28,12 +19,6 @@ const offices = [
       "Sha Tsui Road, Tsuen Wan",
       "New Territories, Hong Kong",
     ],
-    linkLabel: "Email us",
-    href: `mailto:${siteConfig.email}`,
-  },
-  {
-    title: "China",
-    lines: ["On ground sourcing team", "Manufacturing hubs across China"],
     linkLabel: "Email us",
     href: `mailto:${siteConfig.email}`,
   },
@@ -64,7 +49,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8">
           <nav aria-label="Footer">
             <ul className="flex flex-wrap items-center gap-x-7 gap-y-3 md:gap-x-9">
-              {footerNav.map((link) => (
+              {navLinks.map((link) => (
                 <li key={link.href + link.label}>
                   <Link
                     href={link.href}
@@ -100,22 +85,7 @@ export function SiteFooter() {
           </ul>
         </div>
 
-        <div className="mt-10 grid gap-8 border-t border-[#E8E8E8] pt-10 sm:grid-cols-2 md:mt-12 md:gap-x-12 md:pt-12 lg:grid-cols-4 lg:gap-x-10">
-          <div>
-            <p
-              className="text-[14px] leading-[1.55] text-[#9A9A9A] md:text-[15px]"
-              style={{ fontWeight: 400 }}
-            >
-              Find Us
-            </p>
-            <p
-              className="mt-1 text-[14px] leading-[1.55] text-[#9A9A9A] md:text-[15px]"
-              style={{ fontWeight: 400 }}
-            >
-              AJ Sourcing
-            </p>
-          </div>
-
+        <div className="mt-10 grid gap-8 border-t border-[#E8E8E8] pt-10 sm:grid-cols-2 md:mt-12 md:gap-x-12 md:pt-12 lg:grid-cols-2 lg:gap-x-10">
           {offices.map((office) => (
             <div key={office.title}>
               <p
@@ -171,21 +141,12 @@ export function SiteFooter() {
 
         <div className="content-width section-x relative z-[1] mt-8 md:mt-10">
           <div className="border-t border-[#E8E8E8] pb-7 pt-5 md:pb-8 md:pt-6">
-            <div className="grid grid-cols-1 gap-3 text-[12px] text-[#8A8A8A] md:grid-cols-3 md:items-center md:gap-4 md:text-[13px]">
-              <p
-                className="max-w-[42ch] leading-[1.45] md:max-w-none md:justify-self-start"
-                style={{ fontWeight: 400 }}
-              >
-                {siteConfig.location}
-              </p>
-              <p
-                className="md:justify-self-center md:text-center"
-                style={{ fontWeight: 400 }}
-              >
+            <div className="flex flex-col gap-3 text-[12px] text-[#8A8A8A] md:flex-row md:items-center md:justify-between md:gap-4 md:text-[13px]">
+              <p style={{ fontWeight: 400 }}>
                 © 2026 AJ Sourcing. All rights reserved.
               </p>
               <p
-                className="flex flex-wrap gap-x-4 gap-y-1 md:justify-self-end md:justify-end"
+                className="flex flex-wrap gap-x-4 gap-y-1 md:justify-end"
                 style={{ fontWeight: 400 }}
               >
                 <Link

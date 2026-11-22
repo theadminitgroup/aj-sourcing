@@ -196,10 +196,6 @@ export default function TermsOfServicePage() {
       <LegalSection title="13. Contact Information">
         <p>For questions about these Terms of Service, please contact:</p>
         <p>
-          <strong className="text-light-primary">AJ Sourcing</strong>
-        </p>
-        <p>
-          Email:{" "}
           <a
             href={`mailto:${siteConfig.email}`}
             className="text-light-primary underline decoration-[#E8E8E8] underline-offset-4 transition-colors hover:decoration-light-primary"
@@ -207,7 +203,6 @@ export default function TermsOfServicePage() {
             {siteConfig.email}
           </a>
         </p>
-        <p>Registered business name: AJ Sourcing</p>
       </LegalSection>
     </LegalDocument>
   );

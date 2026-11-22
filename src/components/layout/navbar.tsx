@@ -150,18 +150,24 @@ function NavChrome({
 }
 
 /**
- * Hero: absolute (scrolls away).
- * After hero: sticky white bar — always visible while past the hero.
+ * Homepage: transparent nav over hero, then white sticky after scroll.
+ * Inner pages (no #hero): light top nav at rest; white sticky only after scroll.
+ * Never show both bars at once.
  */
 export function SiteNavbar() {
   const [open, setOpen] = useState(false);
+  const [hasHero, setHasHero] = useState(false);
   const [pastHero, setPastHero] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { openContact } = useContact();
 
   useEffect(() => {
     const hero = document.getElementById("hero");
-    if (!hero) {
-      const onScroll = () => setPastHero(window.scrollY > 48);
+    const exists = Boolean(hero);
+    setHasHero(exists);
+
+    if (!exists) {
+      const onScroll = () => setScrolled(window.scrollY > 48);
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
       return () => window.removeEventListener("scroll", onScroll);
@@ -169,13 +175,12 @@ export function SiteNavbar() {
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        const next = !entry.isIntersecting;
-        setPastHero(next);
+        setPastHero(!entry.isIntersecting);
         setOpen(false);
       },
       { threshold: 0, root: null, rootMargin: "0px" }
     );
-    io.observe(hero);
+    io.observe(hero!);
     return () => io.disconnect();
   }, []);
 
@@ -193,34 +198,69 @@ export function SiteNavbar() {
     };
   }, [open]);
 
+  const showSticky = hasHero ? pastHero : scrolled;
+  const showTopBar = hasHero ? !pastHero : !scrolled;
+  const menuTone: NavTone = hasHero && !pastHero ? "hero" : "sticky";
+
   return (
     <>
-      <header
-        className="absolute inset-x-0 top-0 z-50 bg-transparent"
-        inert={pastHero || open ? true : undefined}
-      >
-        <NavChrome
-          tone="hero"
-          onQuote={openContact}
-          menuOpen={open && !pastHero}
-          onToggleMenu={() => setOpen((v) => !v)}
-        />
-      </header>
+      {/* Homepage hero nav — fully hidden once sticky takes over */}
+      {hasHero && (
+        <header
+          className={cn(
+            "absolute inset-x-0 top-0 z-50 bg-transparent transition-opacity duration-200",
+            showTopBar && !open
+              ? "pointer-events-auto opacity-100"
+              : "pointer-events-none opacity-0"
+          )}
+          aria-hidden={!showTopBar || open}
+          inert={!showTopBar || open ? true : undefined}
+        >
+          <NavChrome
+            tone="hero"
+            onQuote={openContact}
+            menuOpen={open && showTopBar}
+            onToggleMenu={() => setOpen((v) => !v)}
+          />
+        </header>
+      )}
 
+      {/* Inner-page top nav (light) — only before scroll */}
+      {!hasHero && (
+        <header
+          className={cn(
+            "absolute inset-x-0 top-0 z-50 border-b border-black/[0.04] bg-white transition-opacity duration-200",
+            showTopBar && !open
+              ? "pointer-events-auto opacity-100"
+              : "pointer-events-none opacity-0"
+          )}
+          aria-hidden={!showTopBar || open}
+          inert={!showTopBar || open ? true : undefined}
+        >
+          <NavChrome
+            tone="sticky"
+            onQuote={openContact}
+            menuOpen={open && showTopBar}
+            onToggleMenu={() => setOpen((v) => !v)}
+          />
+        </header>
+      )}
+
+      {/* Sticky white bar — only after scroll / past hero */}
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b border-black/[0.04] bg-white/95 backdrop-blur-md transition-transform duration-300 ease-out",
-          pastHero && !open
+          showSticky && !open
             ? "pointer-events-auto translate-y-0 shadow-[0_1px_0_rgba(17,41,71,0.04),0_8px_24px_rgba(13,15,18,0.06)]"
             : "pointer-events-none -translate-y-full shadow-none"
         )}
-        aria-hidden={!pastHero || open}
-        inert={!pastHero || open ? true : undefined}
+        aria-hidden={!showSticky || open}
+        inert={!showSticky || open ? true : undefined}
       >
         <NavChrome
           tone="sticky"
           onQuote={openContact}
-          menuOpen={open && pastHero}
+          menuOpen={open && showSticky}
           onToggleMenu={() => setOpen((v) => !v)}
         />
       </header>
@@ -229,7 +269,7 @@ export function SiteNavbar() {
         open={open}
         onClose={() => setOpen(false)}
         onQuote={openContact}
-        tone={pastHero ? "sticky" : "hero"}
+        tone={menuTone}
       />
     </>
   );

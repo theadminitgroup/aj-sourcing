@@ -130,10 +130,6 @@ export default function PrivacyPolicyPage() {
           information, please contact:
         </p>
         <p>
-          <strong className="text-light-primary">AJ Sourcing</strong>
-        </p>
-        <p>
-          Email:{" "}
           <a
             href={`mailto:${siteConfig.email}`}
             className="text-light-primary underline decoration-[#E8E8E8] underline-offset-4 transition-colors hover:decoration-light-primary"
@@ -141,7 +137,6 @@ export default function PrivacyPolicyPage() {
             {siteConfig.email}
           </a>
         </p>
-        <p>Registered business name: AJ Sourcing</p>
       </LegalSection>
     </LegalDocument>
   );
