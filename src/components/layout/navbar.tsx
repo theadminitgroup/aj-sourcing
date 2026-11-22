@@ -7,6 +7,7 @@ import { navLinks, siteConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type NavTone = "hero" | "sticky";
@@ -151,38 +152,86 @@ function NavChrome({
 
 /**
  * Homepage: transparent nav over hero, then white sticky after scroll.
- * Inner pages (no #hero): light top nav at rest; white sticky only after scroll.
+ * Inner pages: light top nav at rest; white sticky only after scroll.
  * Never show both bars at once.
+ *
+ * Lives in root layout (does not remount on navigation) — sticky/hero
+ * state must reset on every pathname change or it leaks across pages.
  */
 export function SiteNavbar() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
-  const [hasHero, setHasHero] = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openContact } = useContact();
 
+  // Reset sticky state + re-bind listeners on every route change
   useEffect(() => {
-    const hero = document.getElementById("hero");
-    const exists = Boolean(hero);
-    setHasHero(exists);
+    setOpen(false);
+    setPastHero(false);
+    setScrolled(false);
 
-    if (!exists) {
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+    let raf1 = 0;
+    let raf2 = 0;
+
+    const bindHome = () => {
+      const hero = document.getElementById("hero");
+      if (!hero) {
+        // Hero not mounted yet — try once more next frame
+        raf2 = requestAnimationFrame(() => {
+          if (cancelled) return;
+          const late = document.getElementById("hero");
+          if (!late) return;
+          observeHero(late);
+        });
+        return;
+      }
+      observeHero(hero);
+    };
+
+    const observeHero = (hero: Element) => {
+      const sync = () => {
+        // Guard: only sticky once we've actually scrolled past the hero
+        const rect = hero.getBoundingClientRect();
+        setPastHero(rect.bottom <= 0);
+      };
+      sync();
+
+      const onScroll = () => {
+        if (cancelled) return;
+        sync();
+        setOpen(false);
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      cleanup = () => window.removeEventListener("scroll", onScroll);
+    };
+
+    const bindInner = () => {
       const onScroll = () => setScrolled(window.scrollY > 48);
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
-    }
+      cleanup = () => window.removeEventListener("scroll", onScroll);
+    };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        setPastHero(!entry.isIntersecting);
-        setOpen(false);
-      },
-      { threshold: 0, root: null, rootMargin: "0px" }
-    );
-    io.observe(hero!);
-    return () => io.disconnect();
-  }, []);
+    // Double rAF: wait for App Router to swap page content + scroll to top
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        if (cancelled) return;
+        if (isHome) bindHome();
+        else bindInner();
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      cleanup?.();
+    };
+  }, [pathname, isHome]);
 
   useEffect(() => {
     if (!open) return;
@@ -198,14 +247,14 @@ export function SiteNavbar() {
     };
   }, [open]);
 
-  const showSticky = hasHero ? pastHero : scrolled;
-  const showTopBar = hasHero ? !pastHero : !scrolled;
-  const menuTone: NavTone = hasHero && !pastHero ? "hero" : "sticky";
+  const showSticky = isHome ? pastHero : scrolled;
+  const showTopBar = isHome ? !pastHero : !scrolled;
+  const menuTone: NavTone = isHome && !pastHero ? "hero" : "sticky";
 
   return (
     <>
       {/* Homepage hero nav — fully hidden once sticky takes over */}
-      {hasHero && (
+      {isHome && (
         <header
           className={cn(
             "absolute inset-x-0 top-0 z-50 bg-transparent transition-opacity duration-200",
@@ -226,7 +275,7 @@ export function SiteNavbar() {
       )}
 
       {/* Inner-page top nav (light) — only before scroll */}
-      {!hasHero && (
+      {!isHome && (
         <header
           className={cn(
             "absolute inset-x-0 top-0 z-50 border-b border-black/[0.04] bg-white transition-opacity duration-200",
