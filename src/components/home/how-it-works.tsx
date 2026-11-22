@@ -1,10 +1,17 @@
-"use client";
-
+import {
+  ClipboardList,
+  Search,
+  Factory,
+  Truck,
+  type LucideIcon,
+} from "lucide-react";
 import { homepageCopy, howItWorks } from "@/lib/data";
 import { FadeUp } from "@/components/ui/motion";
 
+const stepIcons: LucideIcon[] = [ClipboardList, Search, Factory, Truck];
+
 /**
- * Connected process timeline — navy full-bleed, horizontal desktop / vertical mobile.
+ * How It Works — heading left, four step cards right.
  */
 export function HowItWorksSection() {
   const { heading, subtext } = homepageCopy.howItWorks;
@@ -12,92 +19,57 @@ export function HowItWorksSection() {
   return (
     <section
       id="how-it-works"
-      data-surface="dark"
-      className="scroll-mt-24 py-16 md:py-20 lg:py-24"
-      style={{ backgroundColor: "#112947" }}
+      data-surface="light"
+      className="scroll-mt-24 bg-white section-y"
     >
       <div className="content-width section-x">
-        <FadeUp>
-          <div className="max-w-[560px] stack-copy">
-            <h2 className="heading-section-dark text-balance">{heading}</h2>
-            <p className="section-subtext-dark">{subtext}</p>
-          </div>
-        </FadeUp>
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-14 xl:gap-16">
+          <FadeUp className="max-w-[420px] shrink-0 lg:w-[38%]">
+            <div className="stack-copy">
+              <h2 className="heading-section text-balance">{heading}</h2>
+              <p className="section-subtext">{subtext}</p>
+            </div>
+          </FadeUp>
 
-        {/* Desktop horizontal timeline */}
-        <FadeUp className="relative mt-14 hidden md:mt-16 md:block lg:mt-20">
-          <div
-            aria-hidden
-            className="absolute left-0 right-0 top-[18px] h-px bg-white/20"
-          />
-          <ol className="relative grid list-none grid-cols-4 gap-8 lg:gap-10">
-            {howItWorks.map((step) => (
-              <li key={step.step} className="relative pt-10">
-                <span
-                  aria-hidden
-                  className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center bg-[#112947]"
-                >
-                  <span className="h-2.5 w-2.5 rounded-full bg-white ring-[6px] ring-[#112947]" />
-                </span>
-                <p
-                  className="text-[13px] tracking-[0.08em] text-white/55"
-                  style={{ fontWeight: 500 }}
-                >
-                  {step.step}
-                </p>
-                <h3
-                  className="mt-3 text-[18px] leading-[1.3] tracking-[-0.01em] text-white lg:text-[20px]"
-                  style={{ fontWeight: 500 }}
-                >
-                  {step.title}
-                </h3>
-                <p
-                  className="mt-2.5 max-w-[28ch] text-[15px] leading-[1.55] lg:text-[16px]"
-                  style={{ color: "#CFD9E6", fontWeight: 400 }}
-                >
-                  {step.description}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </FadeUp>
+          <FadeUp className="min-w-0 flex-1">
+            <ol className="list-none space-y-4 md:space-y-5">
+              {howItWorks.map((step, i) => {
+                const Icon = stepIcons[i] ?? ClipboardList;
 
-        {/* Mobile vertical timeline */}
-        <FadeUp className="relative mt-12 md:hidden">
-          <div
-            aria-hidden
-            className="absolute bottom-2 left-[7px] top-2 w-px bg-white/20"
-          />
-          <ol className="relative list-none space-y-10">
-            {howItWorks.map((step) => (
-              <li key={step.step} className="relative flex gap-5 pl-1">
-                <span className="relative z-[1] mt-1.5 flex h-4 w-4 shrink-0 items-center justify-center">
-                  <span className="h-2.5 w-2.5 rounded-full bg-white ring-[5px] ring-[#112947]" />
-                </span>
-                <div className="min-w-0 flex-1 pb-1">
-                  <p
-                    className="text-[12px] tracking-[0.08em] text-white/55"
-                    style={{ fontWeight: 500 }}
+                return (
+                  <li
+                    key={step.step}
+                    className="border border-transparent bg-[#F5F6F8] p-5 md:p-6"
+                    style={{ borderRadius: 4 }}
                   >
-                    {step.step}
-                  </p>
-                  <h3
-                    className="mt-2 text-[17px] leading-[1.3] tracking-[-0.01em] text-white"
-                    style={{ fontWeight: 500 }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className="mt-2 text-[15px] leading-[1.55]"
-                    style={{ color: "#CFD9E6", fontWeight: 400 }}
-                  >
-                    {step.description}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </FadeUp>
+                    <div className="flex items-start gap-3.5 md:gap-4">
+                      <Icon
+                        size={24}
+                        strokeWidth={1.5}
+                        className="mt-0.5 shrink-0 text-[#171717]"
+                        aria-hidden
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h3
+                          className="text-[17px] leading-[1.3] tracking-[-0.01em] text-[#171717] md:text-[18px]"
+                          style={{ fontWeight: 400 }}
+                        >
+                          {step.title}
+                        </h3>
+                        <p
+                          className="mt-2 max-w-[46ch] text-[15px] leading-[1.55] text-[#626A73]"
+                          style={{ fontWeight: 400 }}
+                        >
+                          {step.description}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </FadeUp>
+        </div>
       </div>
     </section>
   );

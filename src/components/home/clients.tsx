@@ -1,50 +1,72 @@
-"use client";
-
 import { clients, homepageCopy } from "@/lib/data";
-import { LightSection } from "@/components/ui/section-shell";
 import { FadeUp } from "@/components/ui/motion";
+import { cn } from "@/lib/utils";
 
 /**
- * Clients — left header, luminosity logos (Figma blend via CSS on img).
+ * Trusted Across Industries — single horizontal marquee.
+ * Tile sizes match the previous grid (square ~280px; JD double-width).
  */
+const WIDE_IDS = new Set(["jd"]);
+
+function LogoTrack({ setKey }: { setKey: string }) {
+  return (
+    <ul className="flex shrink-0 list-none items-stretch gap-4 md:gap-5 lg:gap-6">
+      {clients.map((client) => {
+        const wide = WIDE_IDS.has(client.id);
+        return (
+          <li
+            key={`${setKey}-${client.id}`}
+            className={cn(
+              "shrink-0 overflow-hidden bg-white opacity-60",
+              wide
+                ? "h-[240px] w-[min(90vw,520px)] sm:h-[260px] sm:w-[540px] md:h-[280px] md:w-[580px] lg:h-[300px] lg:w-[620px]"
+                : "h-[240px] w-[240px] sm:h-[260px] sm:w-[260px] md:h-[280px] md:w-[280px] lg:h-[300px] lg:w-[300px]"
+            )}
+            style={{ borderRadius: 4 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={client.logo}
+              alt={client.name}
+              width={wide ? 1100 : 520}
+              height={520}
+              className="h-full w-full object-contain mix-blend-luminosity"
+              loading="lazy"
+              decoding="async"
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export function ClientsSection() {
   const { heading, subtext } = homepageCopy.clients;
 
   return (
-    <LightSection
+    <section
       id="clients"
-      className="scroll-mt-24"
-      innerClassName="py-16 md:py-20 lg:py-24"
+      data-surface="light"
+      className="scroll-mt-24 bg-white section-y"
     >
-      <FadeUp>
-        <div className="max-w-[560px] stack-copy text-left">
-          <h2 className="heading-section text-balance">{heading}</h2>
-          <p className="section-subtext">{subtext}</p>
+      <div className="content-width section-x">
+        <FadeUp>
+          <div className="mx-auto max-w-[640px] stack-copy items-center text-center">
+            <h2 className="heading-section text-balance">{heading}</h2>
+            <p className="section-subtext text-center">{subtext}</p>
+          </div>
+        </FadeUp>
+      </div>
+
+      <FadeUp className="mt-12 md:mt-14">
+        <div className="marquee-paused overflow-hidden">
+          <div className="marquee-clients flex w-max items-stretch gap-4 md:gap-5 lg:gap-6">
+            <LogoTrack setKey="a" />
+            <LogoTrack setKey="b" />
+          </div>
         </div>
       </FadeUp>
-
-      <FadeUp>
-        <ul className="mt-10 grid list-none grid-cols-2 items-center gap-x-6 gap-y-8 sm:grid-cols-3 md:mt-12 md:grid-cols-4 md:gap-x-8 md:gap-y-12 lg:gap-x-10">
-          {clients.map((client) => (
-            <li
-              key={client.id}
-              className="flex h-[88px] items-center justify-center md:h-[104px]"
-            >
-              {/* Native img — SVG; next/image blocks SVG by default */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={client.logo}
-                alt={client.name}
-                width={280}
-                height={120}
-                className="max-h-[64px] w-auto max-w-[180px] object-contain mix-blend-luminosity sm:max-h-[72px] sm:max-w-[200px] md:max-h-[80px] md:max-w-[220px]"
-                loading="lazy"
-                decoding="async"
-              />
-            </li>
-          ))}
-        </ul>
-      </FadeUp>
-    </LightSection>
+    </section>
   );
 }

@@ -1,44 +1,78 @@
 "use client";
 
+import Image from "next/image";
+import { Package, Palette, MonitorSmartphone } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { homepageCopy } from "@/lib/data";
-import { useContact } from "@/components/contact/contact-context";
 import { FadeUp } from "@/components/ui/motion";
 
+const pillarIcons: Record<string, LucideIcon> = {
+  "product-sourcing": Package,
+  "branding-design": Palette,
+  "digital-presence": MonitorSmartphone,
+};
+
 /**
- * Navy editorial promo — brand launch interlude between services and process.
+ * Light section — three pillars for new launches + supporting visual.
  */
 export function BrandLaunchBanner() {
-  const { heading, subtext, cta } = homepageCopy.brandLaunch;
-  const { openContact } = useContact();
+  const { heading, subtext, pillars } = homepageCopy.brandLaunch;
 
   return (
     <section
       id="brand-launch"
       data-surface="light"
-      className="scroll-mt-24 bg-white pb-16 pt-2 md:pb-20 md:pt-4 lg:pb-24"
+      className="scroll-mt-24 bg-[#F5F6F8] section-y"
     >
       <div className="content-width section-x">
         <FadeUp>
-          <div
-            data-surface="dark"
-            className="flex flex-col gap-8 px-6 py-16 md:flex-row md:items-center md:justify-between md:gap-12 md:px-10 md:py-[72px] lg:px-14"
-            style={{ backgroundColor: "#112947", borderRadius: 2 }}
-          >
-            <div className="max-w-[720px] flex-[0.7] stack-copy">
-              <h2 className="heading-section-dark text-balance">{heading}</h2>
-              <p className="section-subtext-dark">{subtext}</p>
-            </div>
+          <div className="max-w-[640px] stack-copy text-left">
+            <h2 className="heading-section text-balance">{heading}</h2>
+            <p className="section-subtext text-left">{subtext}</p>
+          </div>
+        </FadeUp>
 
-            <div className="flex shrink-0 md:flex-[0.3] md:justify-end">
-              <button
-                type="button"
-                onClick={() => openContact()}
-                className="inline-flex h-12 items-center justify-center bg-white px-7 text-[13px] uppercase tracking-[0.1em] text-[#112947] transition-colors duration-200 hover:bg-[#F3D3A1] hover:text-[#112947] md:h-[52px] md:px-8"
-                style={{ borderRadius: 2, fontWeight: 500 }}
-              >
-                {cta}
-              </button>
-            </div>
+        <FadeUp className="mt-12 md:mt-14 lg:mt-16">
+          <ul className="grid list-none grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8 md:gap-10 lg:gap-14">
+            {pillars.map((pillar) => {
+              const Icon = pillarIcons[pillar.id] ?? Package;
+              return (
+                <li key={pillar.id} className="flex flex-col items-start">
+                  <Icon
+                    size={28}
+                    strokeWidth={1.5}
+                    className="text-[#171717]"
+                    aria-hidden
+                  />
+                  <h3
+                    className="mt-5 text-[18px] leading-[1.3] tracking-[-0.015em] text-[#171717] md:mt-6 md:text-[20px]"
+                    style={{ fontWeight: 400 }}
+                  >
+                    {pillar.title}
+                  </h3>
+                  <p
+                    className="mt-3 max-w-[36ch] text-[15px] leading-[1.6] text-[#626A73] md:text-[16px]"
+                    style={{ fontWeight: 400 }}
+                  >
+                    {pillar.description}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </FadeUp>
+
+        <FadeUp className="mt-12 md:mt-14 lg:mt-16">
+          <div className="relative aspect-[2/1] w-full overflow-hidden">
+            <Image
+              src="/images/brand-launch/from-china-to-new-brand.png"
+              alt="From China to a new brand launch — packaging sketches, samples, and design work in progress"
+              fill
+              sizes="(max-width: 1320px) 100vw, 1320px"
+              quality={95}
+              priority={false}
+              className="object-cover object-center"
+            />
           </div>
         </FadeUp>
       </div>

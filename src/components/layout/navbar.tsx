@@ -2,6 +2,7 @@
 
 import { BrandLogo } from "@/components/brand/logo";
 import { useContact } from "@/components/contact/contact-context";
+import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -21,14 +22,32 @@ function MobileMenu({
   onQuote: () => void;
   tone: NavTone;
 }) {
+  const isDark = tone === "hero";
+
   return (
     <div
       className={cn(
         "fixed inset-0 z-[60] transition-opacity duration-300 lg:hidden",
-        tone === "hero" ? "bg-[#0c1d33]/97" : "bg-white/97",
+        isDark ? "bg-[#0D0F12]/98" : "bg-white/97",
         open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       )}
+      role="dialog"
+      aria-modal="true"
+      aria-hidden={!open}
     >
+      <button
+        type="button"
+        onClick={onClose}
+        className={cn(
+          "absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center sm:right-5 md:right-7",
+          isDark ? "text-white hover:bg-white/10" : "text-navy hover:bg-black/[0.04]"
+        )}
+        style={{ borderRadius: 2 }}
+        aria-label="Close menu"
+      >
+        <X size={20} />
+      </button>
+
       <div className="flex h-full flex-col items-center justify-center gap-1 px-6 pt-16">
         {navLinks.map((link) => (
           <Link
@@ -36,24 +55,25 @@ function MobileMenu({
             href={link.href}
             className={cn(
               "px-4 py-3 text-[13px] font-normal uppercase tracking-[0.14em]",
-              tone === "hero" ? "text-white" : "text-navy"
+              isDark ? "text-white" : "text-navy"
             )}
             onClick={onClose}
           >
             {link.label}
           </Link>
         ))}
-        <button
+        <Button
           type="button"
+          variant={isDark ? "onDark" : "primary"}
+          size="nav"
+          className="mt-6"
           onClick={() => {
             onClose();
             onQuote();
           }}
-          className="mt-6 inline-flex h-11 items-center bg-blue px-6 text-[13px] font-normal uppercase tracking-[0.08em] text-white"
-          style={{ borderRadius: 2 }}
         >
           Get a Free Quote
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -61,13 +81,11 @@ function MobileMenu({
 
 function NavChrome({
   tone,
-  showRule,
   onQuote,
   menuOpen,
   onToggleMenu,
 }: {
   tone: NavTone;
-  showRule: boolean;
   onQuote: () => void;
   menuOpen: boolean;
   onToggleMenu: () => void;
@@ -100,14 +118,15 @@ function NavChrome({
         </ul>
 
         <div className="relative z-10 flex shrink-0 items-center gap-2">
-          <button
+          <Button
             type="button"
+            variant={isHero ? "onDark" : "primary"}
+            size="nav"
             onClick={onQuote}
-            className="hidden items-center bg-blue px-5 py-2.5 text-[12px] font-normal uppercase tracking-[0.12em] text-white transition-colors duration-300 hover:bg-blue/90 lg:inline-flex"
-            style={{ borderRadius: 2 }}
+            className="hidden lg:inline-flex"
           >
             Get a Free Quote
-          </button>
+          </Button>
 
           <button
             type="button"
@@ -120,28 +139,23 @@ function NavChrome({
             style={{ borderRadius: 2 }}
             onClick={onToggleMenu}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </nav>
-
-      {/* Container-width rule — hero only */}
-      {showRule && (
-        <div aria-hidden className="h-px w-full bg-white/30" />
-      )}
     </div>
   );
 }
 
 /**
- * Hero: absolute (scrolls away) + container rule.
- * Past hero: fixed bar slides in from top.
+ * Hero: absolute (scrolls away).
+ * After hero: sticky white bar — always visible while past the hero.
  */
 export function SiteNavbar() {
   const [open, setOpen] = useState(false);
   const [pastHero, setPastHero] = useState(false);
-  const [stickyIn, setStickyIn] = useState(false);
   const { openContact } = useContact();
 
   useEffect(() => {
@@ -153,9 +167,12 @@ export function SiteNavbar() {
       return () => window.removeEventListener("scroll", onScroll);
     }
 
-    // Sticky only when the hero has fully left the viewport
     const io = new IntersectionObserver(
-      ([entry]) => setPastHero(!entry.isIntersecting),
+      ([entry]) => {
+        const next = !entry.isIntersecting;
+        setPastHero(next);
+        setOpen(false);
+      },
       { threshold: 0, root: null, rootMargin: "0px" }
     );
     io.observe(hero);
@@ -163,47 +180,45 @@ export function SiteNavbar() {
   }, []);
 
   useEffect(() => {
-    if (!pastHero) {
-      setStickyIn(false);
-      setOpen(false);
-      return;
-    }
-    const id = requestAnimationFrame(() => setStickyIn(true));
-    return () => cancelAnimationFrame(id);
-  }, [pastHero]);
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <>
-      {/* Scrolls with the hero — not fixed */}
       <header
         className="absolute inset-x-0 top-0 z-50 bg-transparent"
-        inert={pastHero ? true : undefined}
+        inert={pastHero || open ? true : undefined}
       >
         <NavChrome
           tone="hero"
-          showRule
           onQuote={openContact}
           menuOpen={open && !pastHero}
           onToggleMenu={() => setOpen((v) => !v)}
         />
       </header>
 
-      {/* Moves in after leaving the hero */}
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-white/95 backdrop-blur-md transition-transform duration-500 ease-out",
-          pastHero
-            ? stickyIn
-              ? "pointer-events-auto translate-y-0"
-              : "pointer-events-none -translate-y-full"
-            : "pointer-events-none -translate-y-full"
+          "fixed inset-x-0 top-0 z-50 border-b border-black/[0.04] bg-white/95 backdrop-blur-md transition-transform duration-300 ease-out",
+          pastHero && !open
+            ? "pointer-events-auto translate-y-0 shadow-[0_1px_0_rgba(17,41,71,0.04),0_8px_24px_rgba(13,15,18,0.06)]"
+            : "pointer-events-none -translate-y-full shadow-none"
         )}
-        aria-hidden={!pastHero}
-        inert={!pastHero ? true : undefined}
+        aria-hidden={!pastHero || open}
+        inert={!pastHero || open ? true : undefined}
       >
         <NavChrome
           tone="sticky"
-          showRule={false}
           onQuote={openContact}
           menuOpen={open && pastHero}
           onToggleMenu={() => setOpen((v) => !v)}

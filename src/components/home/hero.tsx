@@ -72,8 +72,10 @@ export function Hero() {
             {subtext}
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:gap-4">
-            <QuoteButton size="lg">{ctas[0].label}</QuoteButton>
-            <ButtonLink href={ctas[1].href} variant="ghost" size="lg">
+            <QuoteButton variant="onDark" size="lg">
+              {ctas[0].label}
+            </QuoteButton>
+            <ButtonLink href={ctas[1].href} variant="outlineOnDark" size="lg">
               {ctas[1].label}
             </ButtonLink>
           </div>

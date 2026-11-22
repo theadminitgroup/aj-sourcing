@@ -16,7 +16,7 @@ export const chatNodes: Record<string, ChatNode> = {
   welcome: {
     id: "welcome",
     bot: [
-      "Hi — I’m the AJ Sourcing assistant.",
+      "Hi. I’m the AJ Sourcing assistant.",
       "I can help you get a quote, explain shipping terms, or walk you through how we work.",
     ],
     replies: [
@@ -30,7 +30,7 @@ export const chatNodes: Record<string, ChatNode> = {
   quote: {
     id: "quote",
     bot: [
-      "Great — share your product brief and we’ll guide the next step.",
+      "Great. Share your product brief and we’ll guide the next step.",
       "Open the quote form and a specialist will reply within 48 hours.",
     ],
     replies: [
@@ -46,7 +46,7 @@ export const chatNodes: Record<string, ChatNode> = {
   source: {
     id: "source",
     bot: [
-      "We source across industries — from auto parts and electronics to apparel, packaging, machinery, and custom OEM.",
+      "We source across industries: from auto parts and electronics to apparel, packaging, machinery, and custom OEM.",
       "Tell us the product, quantity, and destination, and we’ll match the right manufacturer.",
     ],
     replies: [
@@ -68,10 +68,10 @@ export const chatNodes: Record<string, ChatNode> = {
   shipping: {
     id: "shipping",
     bot: [
-      "EXW — factory pickup only.",
-      "FOB — goods loaded at the origin port.",
-      "CIF — freight and insurance to the destination port.",
-      "DDP — door-to-door with duties included where applicable.",
+      "EXW: factory pickup only.",
+      "FOB: goods loaded at the origin port.",
+      "CIF: freight and insurance to the destination port.",
+      "DDP: door to door with duties included where applicable.",
       "For Pakistan we can ship by sea or truck; most other destinations go by sea or air.",
     ],
     replies: [

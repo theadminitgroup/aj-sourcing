@@ -33,7 +33,7 @@ export function MetricsBanner() {
                   "text-[32px] leading-none tracking-[-0.03em] md:text-[40px] lg:text-[44px]",
                   m.accent ? "text-[#F3D3A1]" : "text-white"
                 )}
-                style={{ fontWeight: 500 }}
+                style={{ fontWeight: 400 }}
               >
                 {m.value}
                 <span className="text-[18px] md:text-[22px]">{m.suffix}</span>

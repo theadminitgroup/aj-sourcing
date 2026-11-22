@@ -132,7 +132,7 @@ export function AssistantWidget() {
                     className={cn(
                       "max-w-[85%] px-3.5 py-2.5 text-[13.5px] font-normal leading-[1.45]",
                       m.role === "user"
-                        ? "bg-blue text-white"
+                        ? "bg-[#0D0F12] text-white"
                         : "bg-white text-light-primary shadow-card"
                     )}
                     style={{ borderRadius: 2 }}
@@ -150,7 +150,7 @@ export function AssistantWidget() {
                     key={reply.label}
                     type="button"
                     onClick={() => onReply(reply.label, reply.next)}
-                    className="border border-black/[0.08] bg-[#f7f7f5] px-3 py-1.5 text-[12px] font-normal uppercase tracking-[0.06em] text-light-primary transition-colors hover:border-blue/30 hover:bg-blue/[0.06] hover:text-blue"
+                    className="border border-black/[0.08] bg-[#f7f7f5] px-3 py-1.5 text-[12px] font-normal uppercase tracking-[0.06em] text-light-primary transition-colors hover:border-[#0D0F12]/25 hover:bg-black/[0.04] hover:text-[#0D0F12]"
                     style={{ borderRadius: 2 }}
                   >
                     {reply.label}

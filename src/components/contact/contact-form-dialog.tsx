@@ -1,6 +1,7 @@
 "use client";
 
 import { useContact } from "@/components/contact/contact-context";
+import { Button } from "@/components/ui/button";
 import { contactFormServices, siteConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,7 +9,7 @@ import { CheckCircle2, X } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const fieldClass =
-  "w-full rounded-[var(--radius-input)] border border-black/[0.08] bg-[#f7f7f5] px-4 py-3 text-[15px] text-light-primary outline-none transition-[border-color,box-shadow,background-color] placeholder:text-light-muted-text focus:border-blue/40 focus:bg-white focus:shadow-[0_0_0_3px_rgba(0,113,227,0.12)]";
+  "w-full rounded-[var(--radius-input)] border border-black/[0.08] bg-[#f7f7f5] px-4 py-3 text-[15px] text-light-primary outline-none transition-[border-color,box-shadow,background-color] placeholder:text-light-muted-text focus:border-[#0D0F12]/35 focus:bg-white focus:shadow-[0_0_0_3px_rgba(13,15,18,0.1)]";
 
 export function ContactFormDialog() {
   const { isOpen, closeContact, prefill } = useContact();
@@ -137,14 +138,9 @@ export function ContactFormDialog() {
                     A sourcing specialist from {siteConfig.name} will contact you
                     shortly.
                   </p>
-                  <button
-                    type="button"
-                    onClick={handleClose}
-                    className="mt-8 inline-flex h-11 items-center bg-blue px-6 text-[13px] font-normal uppercase tracking-[0.1em] text-white transition-colors hover:bg-blue/90"
-                    style={{ borderRadius: 2 }}
-                  >
+                  <Button type="button" variant="primary" className="mt-8" onClick={handleClose}>
                     Done
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <form
@@ -266,14 +262,15 @@ export function ContactFormDialog() {
                     <p className="text-[13px] leading-[1.4] text-red-600">{error}</p>
                   )}
 
-                  <button
+                  <Button
                     type="submit"
+                    variant="primary"
+                    size="lg"
                     disabled={sending}
-                    className="mt-2 inline-flex h-12 items-center justify-center bg-blue text-[13px] font-normal uppercase tracking-[0.1em] text-white transition-colors hover:bg-blue/90 disabled:opacity-70"
-                    style={{ borderRadius: 2 }}
+                    className="mt-2 w-full"
                   >
                     {sending ? "Sending..." : "Submit request"}
-                  </button>
+                  </Button>
                 </form>
               )}
             </div>
