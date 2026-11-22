@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { homepageCopy, howItWorks } from "@/lib/data";
 import { FadeUp } from "@/components/ui/motion";
 import { cn } from "@/lib/utils";
@@ -34,6 +34,7 @@ const cardThemes = [
   },
 ] as const;
 
+/** Desktop sticky offset only — never apply as `top` on mobile `relative` cards. */
 const STICKY_TOP = "max(5.5rem, calc(50vh - 13rem))";
 /** Previous card shrinks to this as the next one covers it. */
 const SCALE_TO = 0.88;
@@ -149,11 +150,13 @@ export function HowItWorksSection() {
               <article
                 key={step.step}
                 data-hiw-card
-                className="relative rounded-none md:sticky"
-                style={{
-                  zIndex: i + 1,
-                  top: STICKY_TOP,
-                }}
+                className="relative top-auto rounded-none md:sticky md:[top:var(--hiw-sticky-top)]"
+                style={
+                  {
+                    zIndex: i + 1,
+                    ["--hiw-sticky-top"]: STICKY_TOP,
+                  } as CSSProperties
+                }
               >
                 <div
                   data-hiw-panel
