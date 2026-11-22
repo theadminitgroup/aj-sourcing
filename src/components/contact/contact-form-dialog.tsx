@@ -40,37 +40,55 @@ export function ContactFormDialog() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
+    const fullName = String(data.get("fullName") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const company = String(data.get("company") ?? "").trim();
+    const city = String(data.get("city") ?? "").trim();
+    const country = String(data.get("country") ?? "").trim();
+    const service = String(data.get("service") ?? "").trim();
+    const brief = String(data.get("brief") ?? "").trim();
 
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: data.get("fullName"),
-          email: data.get("email"),
-          company: data.get("company"),
-          city: data.get("city"),
-          country: data.get("country"),
-          service: data.get("service"),
-          brief: data.get("brief"),
-        }),
-      });
+      // Browser → FormSubmit directly (free). Server relay gets blocked by FormSubmit.
+      const res = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(siteConfig.email)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: fullName,
+            email,
+            company: company || "—",
+            city: city || "—",
+            country: country || "—",
+            service: service || "—",
+            message: brief,
+            brief,
+            _subject: `New quote request from ${fullName}`,
+            _template: "table",
+            _captcha: "false",
+            _replyto: email,
+          }),
+        }
+      );
 
       const json = (await res.json().catch(() => ({}))) as {
-        error?: string;
+        success?: string | boolean;
         message?: string;
-        pendingActivation?: boolean;
       };
 
-      if (!res.ok) {
-        throw new Error(json.error || "Something went wrong. Please try again.");
-      }
-
-      if (json.pendingActivation) {
-        throw new Error(
-          json.message ||
-            "Check ahmad@ahj.com.hk for a FormSubmit Activate email, click the link, then submit again."
-        );
+      const ok = json.success === true || json.success === "true";
+      if (!ok) {
+        const msg = json.message || "Failed to send enquiry. Please try again.";
+        if (msg.toLowerCase().includes("activation")) {
+          throw new Error(
+            `Check ${siteConfig.email} for a FormSubmit Activate email, click the link, then submit again.`
+          );
+        }
+        throw new Error(msg);
       }
 
       trackMetaEvent("Lead");
