@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 
 export const runtime = "nodejs";
 
@@ -16,6 +15,9 @@ type ContactPayload = {
 function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
+
+/** Free forever form → inbox relay (FormSubmit). No paid plan required. */
+const DEFAULT_INBOX = "ahmad@ahj.com.hk";
 
 export async function POST(request: Request) {
   try {
@@ -39,40 +41,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const toEmail = process.env.CONTACT_TO_EMAIL;
+    const toEmail = (process.env.CONTACT_TO_EMAIL ?? DEFAULT_INBOX).trim();
 
-    if (!apiKey || !toEmail) {
-      console.error("Missing RESEND_API_KEY or CONTACT_TO_EMAIL");
-      return NextResponse.json(
-        { error: "Email service is not configured." },
-        { status: 503 }
-      );
-    }
+    // FormSubmit is free — delivers a copy of the enquiry to your inbox only.
+    const res = await fetch(
+      `https://formsubmit.co/ajax/${encodeURIComponent(toEmail)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: fullName,
+          email,
+          company: company || "—",
+          city: city || "—",
+          country: country || "—",
+          service: service || "—",
+          brief,
+          _subject: `New quote request from ${fullName}`,
+          _template: "table",
+          _captcha: "false",
+          _replyto: email,
+        }),
+      }
+    );
 
-    const resend = new Resend(apiKey);
+    const json = (await res.json().catch(() => ({}))) as {
+      success?: string | boolean;
+      message?: string;
+    };
 
-    // Only notify the business — no email to the form submitter.
-    const { error } = await resend.emails.send({
-      from: "AJ Sourcing <onboarding@resend.dev>",
-      to: [toEmail],
-      replyTo: email,
-      subject: `New quote request from ${fullName}`,
-      html: `
-        <h2>New sourcing enquiry</h2>
-        <p><strong>Name:</strong> ${escapeHtml(fullName)}</p>
-        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-        <p><strong>Company:</strong> ${escapeHtml(company || "—")}</p>
-        <p><strong>City:</strong> ${escapeHtml(city || "—")}</p>
-        <p><strong>Country:</strong> ${escapeHtml(country || "—")}</p>
-        <p><strong>Service needed:</strong> ${escapeHtml(service || "—")}</p>
-        <p><strong>Brief:</strong></p>
-        <p>${escapeHtml(brief).replace(/\n/g, "<br/>")}</p>
-      `,
-    });
-
-    if (error) {
-      console.error("Resend error:", error);
+    if (!res.ok) {
+      console.error("FormSubmit error:", res.status, json);
       return NextResponse.json(
         { error: "Failed to send enquiry. Please try again." },
         { status: 502 }
@@ -87,13 +89,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }

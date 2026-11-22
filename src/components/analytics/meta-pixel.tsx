@@ -8,7 +8,7 @@ import { META_PIXEL_ID } from "@/lib/meta-pixel";
 export function MetaPixel() {
   return (
     <>
-      <Script id="meta-pixel-base" strategy="beforeInteractive">
+      <Script id="meta-pixel-base" strategy="afterInteractive">
         {`
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

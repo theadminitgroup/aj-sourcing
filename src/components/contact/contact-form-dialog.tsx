@@ -3,6 +3,7 @@
 import { trackMetaEvent } from "@/lib/meta-pixel";
 import { useContact } from "@/components/contact/contact-context";
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "@/components/ui/custom-select";
 import { contactFormServices, siteConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -212,21 +213,16 @@ export function ContactFormDialog() {
                     </label>
                   </div>
 
-                  <label className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1.5">
                     <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
                       Service Needed
                     </span>
-                    <select name="service" defaultValue="" className={fieldClass}>
-                      <option value="" disabled>
-                        Select a service
-                      </option>
-                      {contactFormServices.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                    <CustomSelect
+                      name="service"
+                      options={contactFormServices}
+                      placeholder="Select a service"
+                    />
+                  </div>
 
                   <label className="flex flex-col gap-1.5">
                     <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
