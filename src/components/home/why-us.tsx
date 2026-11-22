@@ -1,40 +1,31 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { homepageCopy, whyUsFeatures } from "@/lib/data";
+import { useEffect, useState } from "react";
+import { homepageCopy, whyUsFeatures, siteConfig } from "@/lib/data";
 import { FadeUp } from "@/components/ui/motion";
 import { cn } from "@/lib/utils";
 
+const HIGHLIGHT_MS = 3200;
+
 /**
- * Why AJ Sourcing — 4-col features with short center dividers (no top rule).
+ * Why AJ Sourcing — centered header; left feature cards + right video.
+ * Cards highlight in turn on a delay (placeholder until video cues exist).
  */
 export function WhyUsSection() {
   const { heading, subtext } = homepageCopy.whyUs;
-  const ref = useRef<HTMLDivElement>(null);
-  const [revealed, setRevealed] = useState(false);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setRevealed(true);
-      return;
-    }
+    if (reduce || paused) return;
 
-    const el = ref.current;
-    if (!el) return;
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % whyUsFeatures.length);
+    }, HIGHLIGHT_MS);
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setRevealed(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.25 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+    return () => window.clearInterval(id);
+  }, [paused]);
 
   return (
     <section
@@ -42,59 +33,100 @@ export function WhyUsSection() {
       data-surface="light"
       className="scroll-mt-24 bg-white section-y"
     >
-      <div className="content-width section-x" ref={ref}>
+      <div className="content-width section-x">
         <FadeUp>
-          <div className="mx-auto max-w-[560px] stack-copy items-center text-center">
+          <div className="mx-auto max-w-[640px] stack-copy items-center text-center">
             <h2 className="heading-section text-balance">{heading}</h2>
             <p className="section-subtext text-center">{subtext}</p>
           </div>
         </FadeUp>
 
-        <ol className="mt-10 grid list-none grid-cols-1 md:mt-12 md:grid-cols-2 lg:mt-14 lg:grid-cols-4">
-          {whyUsFeatures.map((feature, i) => (
-            <li
-              key={feature.number}
-              className={cn(
-                "relative border-b border-[#E4E7EB] py-6 last:border-b-0 transition-all duration-500 md:border-b-0 md:px-6 md:py-8 lg:px-8 lg:py-10 lg:first:pl-0 lg:last:pr-0",
-                revealed
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-3 opacity-0"
-              )}
-              style={{
-                transitionDelay: revealed ? `${80 + i * 100}ms` : "0ms",
+        <div className="mt-10 grid grid-cols-1 items-stretch gap-6 md:mt-12 lg:mt-14 lg:grid-cols-2 lg:gap-8 xl:gap-10">
+          <FadeUp className="min-w-0">
+            <ol
+              className="flex h-full list-none flex-col gap-4 md:gap-5"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              onFocusCapture={() => setPaused(true)}
+              onBlurCapture={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setPaused(false);
+                }
               }}
             >
-              {/* Short vertical divider — centered, not full column height */}
-              {i > 0 && (
-                <span
-                  aria-hidden
-                  className={cn(
-                    "absolute left-0 top-1/2 hidden h-28 w-px -translate-y-1/2 bg-[#E4E7EB] lg:h-32",
-                    i % 2 === 1 ? "md:block" : "lg:block"
-                  )}
-                />
-              )}
-              <p
-                className="text-[13px] tracking-[0.06em] text-[#112947] md:text-[14px]"
-                style={{ fontWeight: 400 }}
-              >
-                {feature.number}
-              </p>
-              <h3
-                className="mt-4 text-[17px] leading-[1.3] tracking-[-0.01em] text-[#171717] md:mt-5 md:text-[18px]"
-                style={{ fontWeight: 400 }}
-              >
-                {feature.title}
-              </h3>
-              <p
-                className="mt-2.5 max-w-[32ch] text-[15px] leading-[1.55] text-[#626A73] md:mt-3"
-                style={{ fontWeight: 400 }}
-              >
-                {feature.description}
-              </p>
-            </li>
-          ))}
-        </ol>
+              {whyUsFeatures.map((feature, i) => {
+                const isActive = active === i;
+
+                return (
+                  <li key={feature.number}>
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      className={cn(
+                        "w-full border p-5 text-left transition-[background-color,border-color,box-shadow] duration-300 md:p-6",
+                        isActive
+                          ? "border-[#112947]/25 bg-white shadow-[0_8px_28px_rgba(13,15,18,0.06)]"
+                          : "border-transparent bg-[#F5F6F8] hover:bg-[#EEF0F3]"
+                      )}
+                      style={{ borderRadius: 4 }}
+                      aria-current={isActive ? "true" : undefined}
+                    >
+                      <div className="flex items-start gap-3.5 md:gap-4">
+                        <span
+                          className={cn(
+                            "mt-0.5 shrink-0 text-[13px] tracking-[0.06em] transition-colors duration-300 md:text-[14px]",
+                            isActive ? "text-[#112947]" : "text-[#112947]/55"
+                          )}
+                          style={{ fontWeight: 500 }}
+                        >
+                          {feature.number}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <h3
+                            className={cn(
+                              "text-[17px] leading-[1.3] tracking-[-0.01em] transition-colors duration-300 md:text-[18px]",
+                              isActive ? "text-[#171717]" : "text-[#171717]/80"
+                            )}
+                            style={{ fontWeight: 400 }}
+                          >
+                            {feature.title}
+                          </h3>
+                          <p
+                            className={cn(
+                              "mt-2 max-w-[46ch] text-[15px] leading-[1.55] transition-colors duration-300",
+                              isActive ? "text-[#626A73]" : "text-[#626A73]/75"
+                            )}
+                            style={{ fontWeight: 400 }}
+                          >
+                            {feature.description}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </FadeUp>
+
+          <FadeUp className="min-w-0">
+            <div
+              className="relative h-full min-h-[360px] overflow-hidden bg-[#0D0F12] md:min-h-[420px] lg:min-h-full"
+              style={{ borderRadius: 4 }}
+            >
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                src={siteConfig.heroVideo.src}
+                poster={siteConfig.heroVideo.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label="AJ Sourcing operations placeholder video"
+              />
+            </div>
+          </FadeUp>
+        </div>
       </div>
     </section>
   );

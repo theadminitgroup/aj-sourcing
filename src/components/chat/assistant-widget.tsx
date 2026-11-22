@@ -5,7 +5,7 @@ import { siteConfig } from "@/lib/data";
 import { chatNodes, chatWelcomeId, type ChatNode } from "@/lib/chat-flow";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { Headphones, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Message = {
@@ -167,21 +167,13 @@ export function AssistantWidget() {
         aria-label={open ? "Close assistant" : "Open assistant"}
         onClick={() => setOpen((v) => !v)}
         whileTap={{ scale: 0.96 }}
-        className="pointer-events-auto flex h-14 w-14 items-center justify-center overflow-hidden bg-[#112947] text-white shadow-[0_12px_32px_rgba(17,41,71,0.28)] transition-colors duration-500 hover:bg-[#0c1d33]"
-        style={{ borderRadius: 12 }}
+        className="pointer-events-auto flex h-14 w-14 items-center justify-center overflow-hidden bg-[#0D0F12] text-white shadow-[0_12px_32px_rgba(13,15,18,0.28)] transition-colors duration-200 hover:bg-black"
+        style={{ borderRadius: 2 }}
       >
         {open ? (
           <X size={22} strokeWidth={1.75} />
         ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src="/brand/mark.svg"
-            alt=""
-            width={56}
-            height={56}
-            className="pointer-events-none h-full w-full select-none object-cover"
-            draggable={false}
-          />
+          <Headphones size={24} strokeWidth={1.75} aria-hidden />
         )}
       </motion.button>
     </div>

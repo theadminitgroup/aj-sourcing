@@ -64,7 +64,7 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { QuoteButton } from "@/components/contact/quote-button";
 
 // Light section — primary action
-<QuoteButton variant="primary" size="lg">Request a Quote</QuoteButton>
+<QuoteButton variant="primary" size="lg">Get a Free Quote</QuoteButton>
 
 // Light section — secondary
 <ButtonLink href="#services" variant="secondary" size="lg">Our Services</ButtonLink>

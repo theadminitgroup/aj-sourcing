@@ -3,7 +3,7 @@
 import { BrandLogo } from "@/components/brand/logo";
 import { useContact } from "@/components/contact/contact-context";
 import { Button } from "@/components/ui/button";
-import { navLinks } from "@/lib/data";
+import { navLinks, siteConfig } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -72,7 +72,7 @@ function MobileMenu({
             onQuote();
           }}
         >
-          Get a Free Quote
+          {siteConfig.primaryCta}
         </Button>
       </div>
     </div>
@@ -125,7 +125,7 @@ function NavChrome({
             onClick={onQuote}
             className="hidden lg:inline-flex"
           >
-            Get a Free Quote
+            {siteConfig.primaryCta}
           </Button>
 
           <button

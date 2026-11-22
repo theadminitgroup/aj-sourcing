@@ -6,6 +6,8 @@ export const siteConfig = {
   location: "Lahore, Pakistan · On ground in China",
   whatsapp: "https://wa.me/923001234567",
   instagram: "https://instagram.com/ajsourcing",
+  /** Singular primary CTA label — use everywhere. */
+  primaryCta: "Get a Free Quote",
   heroVideo: {
     src: "/videos/aj-hero.mp4",
     poster: "/videos/aj-hero-poster.jpg",
@@ -25,7 +27,7 @@ export const homepageCopy = {
     subtext:
       "From finding suitable manufacturers to coordinating production, quality inspections, and international shipping, AJ Sourcing helps you bring your products from China to your destination.",
     ctas: [
-      { label: "Get a Free Quote", href: "#contact", variant: "primary" as const },
+      { label: siteConfig.primaryCta, href: "#contact", variant: "primary" as const },
       { label: "Explore Services", href: "#services", variant: "secondary" as const },
     ],
   },
@@ -42,25 +44,25 @@ export const homepageCopy = {
   brandLaunch: {
     heading: "Starting Something New?",
     subtext:
-      "Beyond the order. We help you build the product, the brand, and the presence that take it to market.",
+      "Launching a business comes with a lot to figure out. From sourcing your first products to building your brand and getting online, we can help connect the pieces.",
     pillars: [
       {
         id: "product-sourcing",
         title: "Product Sourcing",
         description:
-          "Find the right manufacturers in China, align on specs and quantities, and move from idea to a clear, workable quote.",
+          "Find suitable manufacturers in China, coordinate product requirements, and bring your sourcing plans to life.",
       },
       {
         id: "branding-design",
         title: "Branding & Design",
         description:
-          "Shape how your product looks and feels: packaging, identity, and presentation that match the quality you are importing.",
+          "Get connected with creative professionals for brand identity, packaging, and product presentation.",
       },
       {
         id: "digital-presence",
         title: "Digital Presence",
         description:
-          "Get online with a website, storefront, or digital marketing support so customers can discover and buy what you source.",
+          "Build your online presence with support for websites, online stores, and digital marketing.",
       },
     ] as const,
   },
@@ -70,9 +72,9 @@ export const homepageCopy = {
       "Four straightforward steps, from your first enquiry to the agreed delivery arrangement.",
   },
   shipping: {
-    heading: "Shipping Terms",
+    heading: "Import on Your Terms",
     subtext:
-      "A quick overview of the shipping arrangements we commonly work with when importing from China.",
+      "From factory pickup to door-to-door delivery, we coordinate shipping arrangements that suit your requirements.",
   },
   whyUs: {
     heading: "Why AJ Sourcing?",
@@ -103,15 +105,15 @@ export const homepageCopy = {
   banner: {
     heading: "Ready to Import?",
     subtext:
-      "Tell us what you're looking for. We'll help you explore sourcing options and the next steps.",
-    primaryCta: "Get a Free Quote",
+      "Tell us what you're looking for. We'll help you find the right way to source it from China.",
+    primaryCta: siteConfig.primaryCta,
     secondaryCta: "WhatsApp Us",
   },
   showcase: {
     heading: "What Can We Source?",
     subtext:
       "From everyday products to specialized equipment, we help businesses source across a wide range of industries.",
-    ctaLabel: "Request a Quote",
+    ctaLabel: siteConfig.primaryCta,
   },
   founder: {
     label: "OUR STORY",
@@ -259,12 +261,6 @@ export const sourcingCategories = [
     title: "Sports & Outdoor",
     src: "/images/categories/sports-outdoor.png",
   },
-  {
-    id: "anything",
-    title: "Anything You Need",
-    src: "/images/categories/anything-you-need.png",
-    special: true,
-  },
 ] as const;
 
 /** @deprecated Prefer sourcingCategories */
@@ -310,24 +306,36 @@ export const howItWorks = [
     title: "Share Your Requirements",
     description:
       "Tell us what you need, including quantity, specifications, and destination.",
+    image: "/images/how-it-works/01-share-requirements.png",
+    imageAlt:
+      "Discussing product requirements and sourcing needs with the AJ Sourcing team",
   },
   {
     step: "02",
     title: "Source & Quote",
     description:
       "We identify suitable manufacturers and prepare your quotation.",
+    image: "/images/how-it-works/02-source-quote.png",
+    imageAlt:
+      "Coordinating with manufacturers in China to prepare a clear quotation",
   },
   {
     step: "03",
     title: "Produce & Inspect",
     description:
       "We coordinate manufacturing and inspect finished goods against agreed requirements.",
+    image: "/images/how-it-works/03-produce-inspect.png",
+    imageAlt:
+      "Inspecting finished goods against agreed specifications before dispatch",
   },
   {
     step: "04",
     title: "Ship & Deliver",
     description:
       "We arrange shipping, customs, and delivery according to your selected service.",
+    image: "/images/how-it-works/04-ship-deliver.png",
+    imageAlt:
+      "Arranging international shipping and delivery to the agreed destination",
   },
 ];
 
@@ -373,30 +381,26 @@ export const shippingOptions = [
   {
     id: "exw",
     code: "EXW",
-    title: "Ex Works",
     description:
-      "Goods are made available at the factory or warehouse. The buyer generally arranges collection, freight, and delivery.",
+      "Under Ex Works, goods are ready at the factory. We can arrange collection and onward shipping to your destination.",
   },
   {
     id: "fob",
     code: "FOB",
-    title: "Free On Board",
     description:
-      "For sea shipments, the seller loads the goods onto the vessel at the agreed port. The buyer arranges the main freight and onward delivery.",
+      "With Free On Board, your supplier loads the goods onto the vessel. We can arrange sea freight and onward delivery.",
   },
   {
     id: "cif",
     code: "CIF",
-    title: "Cost, Insurance & Freight",
     description:
-      "For sea shipments, the seller pays for freight and insurance to the destination port. Risk transfers to the buyer once the goods are loaded at the origin port.",
+      "Under Cost, Insurance & Freight, your supplier covers sea freight and required insurance to the destination port. We can coordinate clearance and final delivery.",
   },
   {
     id: "ddp",
     code: "DDP",
-    title: "Delivered Duty Paid",
     description:
-      "The seller arranges delivery to the agreed destination, including import clearance and applicable duties and taxes.",
+      "With Delivered Duty Paid, shipping, import clearance, and duties are included up to the agreed destination. We can coordinate this arrangement where available.",
   },
 ];
 

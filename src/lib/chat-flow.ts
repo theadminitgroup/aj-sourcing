@@ -1,3 +1,5 @@
+import { siteConfig } from "@/lib/data";
+
 export type ChatAction =
   | { type: "message"; text: string; replies?: string[] }
   | { type: "openQuote" }
@@ -50,7 +52,7 @@ export const chatNodes: Record<string, ChatNode> = {
       "Tell us the product, quantity, and destination, and we’ll match the right manufacturer.",
     ],
     replies: [
-      { label: "Get a quote", next: "quote" },
+      { label: siteConfig.primaryCta, next: "quote" },
       { label: "See services", next: "services" },
       { label: "Back to menu", next: "welcome" },
     ],
@@ -61,7 +63,7 @@ export const chatNodes: Record<string, ChatNode> = {
       "Our core support covers manufacturer sourcing, product coordination, quality inspection, freight, Pakistan delivery, and import support.",
     ],
     replies: [
-      { label: "Get a quote", next: "quote" },
+      { label: siteConfig.primaryCta, next: "quote" },
       { label: "Back to menu", next: "welcome" },
     ],
   },
@@ -76,7 +78,7 @@ export const chatNodes: Record<string, ChatNode> = {
     ],
     replies: [
       { label: "View shipping section", next: "go-shipping" },
-      { label: "Get a quote", next: "quote" },
+      { label: siteConfig.primaryCta, next: "quote" },
       { label: "Back to menu", next: "welcome" },
     ],
   },
@@ -95,7 +97,7 @@ export const chatNodes: Record<string, ChatNode> = {
     ],
     replies: [
       { label: "See full process", next: "go-how" },
-      { label: "Get a quote", next: "quote" },
+      { label: siteConfig.primaryCta, next: "quote" },
       { label: "Back to menu", next: "welcome" },
     ],
   },

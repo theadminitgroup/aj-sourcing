@@ -16,7 +16,8 @@ const termIcons: Record<(typeof shippingOptions)[number]["id"], LucideIcon> = {
 };
 
 /**
- * Shipping Terms — four equal cards (EXW / FOB / CIF / DDP).
+ * Shipping Terms — 2×2 grid (EXW / FOB / CIF / DDP).
+ * Full form lives inside the description, not as a separate label.
  */
 export function ShippingOptionsSection() {
   const { heading, subtext } = homepageCopy.shipping;
@@ -36,13 +37,13 @@ export function ShippingOptionsSection() {
         </FadeUp>
 
         <FadeUp className="mt-10 md:mt-12 lg:mt-14">
-          <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+          <ul className="grid list-none grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-6">
             {shippingOptions.map((term) => {
               const Icon = termIcons[term.id];
               return (
                 <li
                   key={term.id}
-                  className="flex min-h-[280px] flex-col bg-[#F5F6F8] p-6 md:min-h-[300px] md:p-7 lg:min-h-[320px] lg:p-8"
+                  className="flex min-h-[220px] flex-col bg-[#F5F6F8] p-6 md:min-h-[240px] md:p-7 lg:min-h-[260px] lg:p-8"
                   style={{ borderRadius: 4 }}
                 >
                   <Icon
@@ -52,19 +53,13 @@ export function ShippingOptionsSection() {
                     aria-hidden
                   />
                   <h3
-                    className="mt-8 text-[18px] leading-[1.25] tracking-[-0.015em] text-[#171717] md:mt-10 md:text-[20px]"
+                    className="mt-8 text-[20px] leading-[1.25] tracking-[-0.015em] text-[#171717] md:mt-10 md:text-[22px]"
                     style={{ fontWeight: 400 }}
                   >
                     {term.code}
                   </h3>
                   <p
-                    className="mt-1.5 text-[13px] leading-[1.4] tracking-[0.02em] text-[#112947] md:text-[14px]"
-                    style={{ fontWeight: 400 }}
-                  >
-                    {term.title}
-                  </p>
-                  <p
-                    className="mt-4 flex-1 text-[15px] leading-[1.55] text-[#626A73]"
+                    className="mt-3 flex-1 text-[15px] leading-[1.6] text-[#626A73] md:mt-4 md:text-[16px]"
                     style={{ fontWeight: 400 }}
                   >
                     {term.description}
