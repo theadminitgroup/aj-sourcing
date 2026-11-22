@@ -1,11 +1,11 @@
 export const siteConfig = {
   name: "AJ Sourcing",
   tagline: "One platform for every import, from China to your door.",
-  email: "hello@ajsourcing.com",
-  phone: "+92 300 123 4567",
-  location: "Lahore, Pakistan · On ground in China",
-  whatsapp: "https://wa.me/923001234567",
-  instagram: "https://instagram.com/ajsourcing",
+  email: "ahmad@ahj.com.hk",
+  location:
+    "Room 1506, International Trade Centre, Sha Tsui Road, Tsuen Wan, New Territories, Hong Kong",
+  instagram: "https://www.instagram.com/ajsourcing.com.hk/",
+  facebook: "https://www.facebook.com/profile.php?id=61596692887448",
   /** Singular primary CTA label — use everywhere. */
   primaryCta: "Get a Free Quote",
   heroVideo: {
@@ -107,7 +107,7 @@ export const homepageCopy = {
     subtext:
       "Tell us what you're looking for. We'll help you find the right way to source it from China.",
     primaryCta: siteConfig.primaryCta,
-    secondaryCta: "WhatsApp Us",
+    secondaryCta: "Email Us",
   },
   showcase: {
     heading: "What Can We Source?",

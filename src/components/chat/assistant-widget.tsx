@@ -51,8 +51,8 @@ export function AssistantWidget() {
       openContact();
       return;
     }
-    if (nextId === "open-whatsapp") {
-      window.open(siteConfig.whatsapp, "_blank", "noopener,noreferrer");
+    if (nextId === "open-email") {
+      window.location.href = `mailto:${siteConfig.email}`;
       return;
     }
     if (nextId === "go-shipping") {

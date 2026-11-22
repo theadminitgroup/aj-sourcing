@@ -7,11 +7,10 @@ type ContactPayload = {
   fullName?: string;
   email?: string;
   company?: string;
-  product?: string;
-  quantity?: string;
-  destination?: string;
+  city?: string;
+  country?: string;
   service?: string;
-  details?: string;
+  brief?: string;
 };
 
 function isValidEmail(email: string) {
@@ -24,15 +23,14 @@ export async function POST(request: Request) {
     const fullName = body.fullName?.trim() ?? "";
     const email = body.email?.trim() ?? "";
     const company = body.company?.trim() ?? "";
-    const product = body.product?.trim() ?? "";
-    const quantity = body.quantity?.trim() ?? "";
-    const destination = body.destination?.trim() ?? "";
+    const city = body.city?.trim() ?? "";
+    const country = body.country?.trim() ?? "";
     const service = body.service?.trim() ?? "";
-    const details = body.details?.trim() ?? "";
+    const brief = body.brief?.trim() ?? "";
 
-    if (!fullName || !email || !product) {
+    if (!fullName || !email || !brief) {
       return NextResponse.json(
-        { error: "Full name, email, and product requirement are required." },
+        { error: "Full name, email, and brief are required." },
         { status: 400 }
       );
     }
@@ -43,8 +41,6 @@ export async function POST(request: Request) {
 
     const apiKey = process.env.RESEND_API_KEY;
     const toEmail = process.env.CONTACT_TO_EMAIL;
-    const fromEmail =
-      process.env.CONTACT_FROM_EMAIL ?? "AJ Sourcing <onboarding@resend.dev>";
 
     if (!apiKey || !toEmail) {
       console.error("Missing RESEND_API_KEY or CONTACT_TO_EMAIL");
@@ -56,25 +52,23 @@ export async function POST(request: Request) {
 
     const resend = new Resend(apiKey);
 
-    const html = `
-      <h2>New sourcing enquiry</h2>
-      <p><strong>Name:</strong> ${escapeHtml(fullName)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>Company:</strong> ${escapeHtml(company || "—")}</p>
-      <p><strong>Product requirement:</strong> ${escapeHtml(product)}</p>
-      <p><strong>Quantity:</strong> ${escapeHtml(quantity || "—")}</p>
-      <p><strong>Destination:</strong> ${escapeHtml(destination || "—")}</p>
-      <p><strong>Service needed:</strong> ${escapeHtml(service || "—")}</p>
-      <p><strong>Additional details:</strong></p>
-      <p>${escapeHtml(details || "—").replace(/\n/g, "<br/>")}</p>
-    `;
-
+    // Only notify the business — no email to the form submitter.
     const { error } = await resend.emails.send({
-      from: fromEmail,
+      from: "AJ Sourcing <onboarding@resend.dev>",
       to: [toEmail],
       replyTo: email,
       subject: `New quote request from ${fullName}`,
-      html,
+      html: `
+        <h2>New sourcing enquiry</h2>
+        <p><strong>Name:</strong> ${escapeHtml(fullName)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Company:</strong> ${escapeHtml(company || "—")}</p>
+        <p><strong>City:</strong> ${escapeHtml(city || "—")}</p>
+        <p><strong>Country:</strong> ${escapeHtml(country || "—")}</p>
+        <p><strong>Service needed:</strong> ${escapeHtml(service || "—")}</p>
+        <p><strong>Brief:</strong></p>
+        <p>${escapeHtml(brief).replace(/\n/g, "<br/>")}</p>
+      `,
     });
 
     if (error) {

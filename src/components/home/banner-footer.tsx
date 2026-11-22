@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 
 const socialLinks = [
   { label: "Instagram", href: siteConfig.instagram },
-  { label: "WhatsApp", href: siteConfig.whatsapp },
+  { label: "Facebook", href: siteConfig.facebook },
   { label: "Email", href: `mailto:${siteConfig.email}` },
 ];
 
@@ -30,17 +30,20 @@ const footerNav = [
 
 const offices = [
   {
-    title: "Pakistan",
-    lines: ["Lahore, Pakistan"],
-    linkLabel: "Contact us",
+    title: "Hong Kong",
+    lines: [
+      "Room 1506, International Trade Centre",
+      "Sha Tsui Road, Tsuen Wan",
+      "New Territories, Hong Kong",
+    ],
+    linkLabel: "Email us",
     href: `mailto:${siteConfig.email}`,
   },
   {
     title: "China",
     lines: ["On ground sourcing team", "Manufacturing hubs across China"],
-    linkLabel: "Talk to us",
-    href: siteConfig.whatsapp,
-    external: true,
+    linkLabel: "Email us",
+    href: `mailto:${siteConfig.email}`,
   },
   {
     title: "Worldwide",
@@ -103,9 +106,7 @@ export function BannerFooter() {
                   {primaryCta}
                 </QuoteButton>
                 <a
-                  href={siteConfig.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`mailto:${siteConfig.email}`}
                   className={cn(
                     ctaBase,
                     ctaVariantStyles.outlineOnDark,

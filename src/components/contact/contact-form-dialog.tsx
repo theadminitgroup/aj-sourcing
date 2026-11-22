@@ -1,5 +1,6 @@
 "use client";
 
+import { trackMetaEvent } from "@/components/analytics/meta-pixel";
 import { useContact } from "@/components/contact/contact-context";
 import { Button } from "@/components/ui/button";
 import { contactFormServices, siteConfig } from "@/lib/data";
@@ -17,11 +18,9 @@ export function ContactFormDialog() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const productDefault =
+  const briefDefault =
     prefill?.product ||
-    (prefill?.category
-      ? `Looking to source: ${prefill.category}`
-      : "");
+    (prefill?.category ? `Looking to source: ${prefill.category}` : "");
   const formKey = `${prefill?.category ?? ""}-${prefill?.product ?? ""}-${isOpen}`;
 
   const handleClose = () => {
@@ -49,11 +48,10 @@ export function ContactFormDialog() {
           fullName: data.get("fullName"),
           email: data.get("email"),
           company: data.get("company"),
-          product: data.get("product"),
-          quantity: data.get("quantity"),
-          destination: data.get("destination"),
+          city: data.get("city"),
+          country: data.get("country"),
           service: data.get("service"),
-          details: data.get("details"),
+          brief: data.get("brief"),
         }),
       });
 
@@ -63,6 +61,7 @@ export function ContactFormDialog() {
         throw new Error(json.error || "Something went wrong. Please try again.");
       }
 
+      trackMetaEvent("Lead");
       setSubmitted(true);
       form.reset();
     } catch (err) {
@@ -188,38 +187,26 @@ export function ContactFormDialog() {
                     />
                   </label>
 
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
-                      Product Requirement
-                    </span>
-                    <textarea
-                      name="product"
-                      required
-                      rows={3}
-                      defaultValue={productDefault}
-                      placeholder="What product do you need?"
-                      className={cn(fieldClass, "resize-none")}
-                    />
-                  </label>
-
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
                       <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
-                        Quantity
+                        City
                       </span>
                       <input
-                        name="quantity"
-                        placeholder="e.g. 1,000 units"
+                        name="city"
+                        autoComplete="address-level2"
+                        placeholder="e.g. Karachi"
                         className={fieldClass}
                       />
                     </label>
                     <label className="flex flex-col gap-1.5">
                       <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
-                        Destination
+                        Country
                       </span>
                       <input
-                        name="destination"
-                        placeholder="e.g. Karachi, Pakistan"
+                        name="country"
+                        autoComplete="country-name"
+                        placeholder="e.g. Pakistan"
                         className={fieldClass}
                       />
                     </label>
@@ -243,17 +230,14 @@ export function ContactFormDialog() {
 
                   <label className="flex flex-col gap-1.5">
                     <span className="text-[12px] font-normal uppercase tracking-[0.08em] text-light-primary">
-                      Additional Details
+                      Brief
                     </span>
                     <textarea
-                      name="details"
-                      rows={3}
-                      defaultValue={
-                        prefill?.category
-                          ? `Category interest: ${prefill.category}`
-                          : undefined
-                      }
-                      placeholder="Specs, target price, timeline…"
+                      name="brief"
+                      required
+                      rows={4}
+                      defaultValue={briefDefault}
+                      placeholder="What do you need sourced? Specs, quantity, timeline…"
                       className={cn(fieldClass, "resize-none")}
                     />
                   </label>

@@ -3,7 +3,7 @@ import { siteConfig } from "@/lib/data";
 export type ChatAction =
   | { type: "message"; text: string; replies?: string[] }
   | { type: "openQuote" }
-  | { type: "openWhatsApp" }
+  | { type: "openEmail" }
   | { type: "scroll"; target: string };
 
 export type ChatNode = {
@@ -26,7 +26,7 @@ export const chatNodes: Record<string, ChatNode> = {
       { label: "What can you source?", next: "source" },
       { label: "Explain shipping terms", next: "shipping" },
       { label: "Tell me how it works", next: "how" },
-      { label: "Contact on WhatsApp", next: "whatsapp" },
+      { label: "Email us", next: "email" },
     ],
   },
   quote: {
@@ -106,19 +106,20 @@ export const chatNodes: Record<string, ChatNode> = {
     bot: ["Scrolling to How It Works…"],
     replies: [{ label: "Back to menu", next: "welcome" }],
   },
-  whatsapp: {
-    id: "whatsapp",
+  email: {
+    id: "email",
     bot: [
-      "You can message us on WhatsApp for a quick chat with the team.",
+      `Reach us at ${siteConfig.email}. You can also open the quote form and a specialist will reply within 48 hours.`,
     ],
     replies: [
-      { label: "Open WhatsApp", next: "open-whatsapp" },
+      { label: "Open email", next: "open-email" },
+      { label: "Open quote form", next: "open-quote" },
       { label: "Back to menu", next: "welcome" },
     ],
   },
-  "open-whatsapp": {
-    id: "open-whatsapp",
-    bot: ["Opening WhatsApp…"],
+  "open-email": {
+    id: "open-email",
+    bot: ["Opening your email app…"],
     replies: [{ label: "Back to menu", next: "welcome" }],
   },
 };
