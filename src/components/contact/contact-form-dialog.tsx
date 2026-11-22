@@ -65,7 +65,6 @@ export function ContactFormDialog() {
             city: city || "—",
             country: country || "—",
             service: service || "—",
-            message: brief,
             brief,
             _subject: `New quote request from ${fullName}`,
             _template: "table",
@@ -129,53 +128,62 @@ export function ContactFormDialog() {
           >
             <div className="mx-auto mt-3 h-1 w-10 shrink-0 bg-black/10 md:hidden" style={{ borderRadius: 2 }} />
 
-            <div className="flex items-start justify-between gap-4 px-6 pb-2 pt-5 md:px-8 md:pt-7">
-              <div>
-                <h2
-                  id="contact-form-title"
-                  className="text-[22px] font-normal tracking-[-0.02em] text-light-primary md:text-[24px]"
-                >
-                  {submitted ? "Request received" : "Tell us what you need"}
-                </h2>
-                <p className="mt-1.5 text-[14px] font-normal leading-[1.45] text-light-secondary">
-                  {submitted
-                    ? "We’ll review your brief and get back within 48 hours."
-                    : "Share a few details and we’ll guide you on the next step."}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex h-9 w-9 shrink-0 items-center justify-center bg-black/[0.04] text-light-primary transition-colors hover:bg-black/[0.08]"
-                style={{ borderRadius: 2 }}
-                aria-label="Close"
-              >
-                <X size={18} />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="absolute right-5 top-5 z-10 flex h-9 w-9 shrink-0 items-center justify-center bg-black/[0.04] text-light-primary transition-colors hover:bg-black/[0.08] md:right-6 md:top-6"
+              style={{ borderRadius: 2 }}
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
 
-            <div className="overflow-y-auto px-6 pb-8 pt-4 md:px-8 md:pb-8">
+            <div className="overflow-y-auto px-6 pb-8 pt-5 md:px-8 md:pb-8 md:pt-7">
               {submitted ? (
-                <div className="flex flex-col items-center py-10 text-center">
-                  <span className="flex h-14 w-14 items-center justify-center bg-orange/10 text-orange" style={{ borderRadius: 2 }}>
-                    <CheckCircle2 size={28} strokeWidth={1.75} />
+                <div className="flex min-h-[320px] flex-col items-center justify-center px-2 py-12 text-center md:min-h-[360px]">
+                  <span
+                    className="flex h-16 w-16 items-center justify-center rounded-full bg-orange/10 text-orange"
+                    aria-hidden
+                  >
+                    <CheckCircle2 size={32} strokeWidth={1.75} />
                   </span>
-                  <p className="mt-5 text-[16px] font-normal text-light-primary">
+                  <h2
+                    id="contact-form-title"
+                    className="mt-6 text-[26px] font-normal tracking-[-0.02em] text-light-primary md:text-[30px]"
+                  >
                     Thanks for reaching out
+                  </h2>
+                  <p className="mt-3 max-w-[34ch] text-[15px] font-normal leading-[1.55] text-light-secondary md:text-[16px]">
+                    We’ll review your brief and get back within 48 hours.
                   </p>
-                  <p className="mt-2 max-w-[32ch] text-[14px] font-normal leading-[1.5] text-light-secondary">
-                    A sourcing specialist from {siteConfig.name} will contact you
-                    shortly.
-                  </p>
-                  <Button type="button" variant="primary" className="mt-8" onClick={handleClose}>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    size="lg"
+                    className="mt-8 min-w-[140px]"
+                    onClick={handleClose}
+                  >
                     Done
                   </Button>
                 </div>
               ) : (
+                <>
+                  <div className="pr-12">
+                    <h2
+                      id="contact-form-title"
+                      className="text-[22px] font-normal tracking-[-0.02em] text-light-primary md:text-[24px]"
+                    >
+                      Tell us what you need
+                    </h2>
+                    <p className="mt-1.5 text-[14px] font-normal leading-[1.45] text-light-secondary">
+                      Share a few details and we’ll guide you on the next step.
+                    </p>
+                  </div>
+
                 <form
                   key={formKey}
                   onSubmit={onSubmit}
-                  className="flex flex-col gap-4"
+                  className="mt-6 flex flex-col gap-4"
                 >
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="flex flex-col gap-1.5">
@@ -281,6 +289,7 @@ export function ContactFormDialog() {
                     {sending ? "Sending..." : "Submit request"}
                   </Button>
                 </form>
+                </>
               )}
             </div>
           </motion.div>

@@ -63,7 +63,6 @@ export async function POST(request: Request) {
           city: city || "—",
           country: country || "—",
           service: service || "—",
-          message: brief,
           brief,
           _subject: `New quote request from ${fullName}`,
           _template: "table",
