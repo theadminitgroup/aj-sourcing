@@ -4,9 +4,9 @@ import { useContact } from "@/components/contact/contact-context";
 import { siteConfig } from "@/lib/data";
 import { chatNodes, chatWelcomeId, type ChatNode } from "@/lib/chat-flow";
 import { cn } from "@/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Headphones, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type Message = {
   id: string;
@@ -20,6 +20,8 @@ export function AssistantWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [booted, setBooted] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const panelId = useId();
+  const reducedMotion = useReducedMotion();
   const { openContact } = useContact();
 
   const node: ChatNode = chatNodes[nodeId] ?? chatNodes[chatWelcomeId];
@@ -42,9 +44,12 @@ export function AssistantWidget() {
   }, [open, booted, pushBot]);
 
   useEffect(() => {
-    if (!listRef.current) return;
-    listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [messages, nodeId, open]);
+    if (!open || !listRef.current) return;
+    listRef.current.scrollTo({
+      top: listRef.current.scrollHeight,
+      behavior: reducedMotion ? "auto" : "smooth",
+    });
+  }, [messages, nodeId, open, reducedMotion]);
 
   const runSideEffect = (nextId: string) => {
     if (nextId === "open-quote") {
@@ -56,13 +61,15 @@ export function AssistantWidget() {
       return;
     }
     if (nextId === "go-shipping") {
-      document.getElementById("shipping")?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById("shipping")?.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
       return;
     }
     if (nextId === "go-how") {
-      document
-        .getElementById("how-it-works")
-        ?.scrollIntoView({ behavior: "smooth" });
+      document.getElementById("how-it-works")?.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
       return;
     }
   };
@@ -78,79 +85,106 @@ export function AssistantWidget() {
     const nextNode = chatNodes[next];
     if (!nextNode) return;
 
-    window.setTimeout(() => {
-      setNodeId(next);
-      pushBot(nextNode.bot);
-    }, 220);
+    window.setTimeout(
+      () => {
+        setNodeId(next);
+        pushBot(nextNode.bot);
+      },
+      reducedMotion ? 0 : 220
+    );
   };
+
+  const panelTransition = reducedMotion
+    ? { duration: 0 }
+    : { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
     <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-[90] flex flex-col items-end gap-3 md:bottom-9 md:right-9">
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+            id={panelId}
+            role="dialog"
+            aria-modal="true"
+            aria-label="AJ Sourcing Assistant"
+            initial={
+              reducedMotion
+                ? { opacity: 1 }
+                : { opacity: 0, y: 12, scale: 0.98 }
+            }
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.96 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-auto flex h-[min(520px,min(70dvh,calc(100dvh-6.5rem)))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+            exit={
+              reducedMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: 8, scale: 0.98 }
+            }
+            transition={panelTransition}
+            className="pointer-events-auto flex w-[min(390px,calc(100vw-2rem))] max-h-[min(520px,calc(100dvh-5.5rem))] flex-col overflow-hidden border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
             style={{ borderRadius: 2 }}
           >
-            <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] bg-[#0a0a0a] px-4 py-3.5 text-white">
+            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-black/[0.06] bg-[#0a0a0a] px-4 py-3 text-white">
               <div className="min-w-0">
-                <p className="truncate text-[13px] font-normal uppercase tracking-[0.1em]">
+                <p className="truncate text-[13px] font-normal tracking-[0.02em] text-white">
                   AJ Sourcing Assistant
                 </p>
                 <p className="truncate text-[12px] font-normal text-white/55">
-                  Guided help · usually replies instantly
+                  Quick answers · Guided support
                 </p>
               </div>
               <button
                 type="button"
                 aria-label="Close chat"
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 shrink-0 items-center justify-center bg-white/10 text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+                className="flex h-9 w-9 shrink-0 items-center justify-center bg-white/10 text-white/80 transition-colors duration-200 hover:bg-white/15 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60"
                 style={{ borderRadius: 2 }}
               >
-                <X size={16} />
+                <X size={16} aria-hidden />
               </button>
             </div>
 
+            {/* Grows with messages; scrolls once it hits the panel max */}
             <div
               ref={listRef}
-              className="flex-1 space-y-3 overflow-y-auto bg-[#f7f7f5] px-3.5 py-4"
+              className="min-h-0 flex-1 basis-auto overflow-y-auto overscroll-contain bg-[#f7f7f5] px-3.5 py-3"
+              aria-live="polite"
             >
-              {messages.map((m) => (
-                <div
-                  key={m.id}
-                  className={cn(
-                    "flex",
-                    m.role === "user" ? "justify-end" : "justify-start"
-                  )}
-                >
+              <div className="flex flex-col gap-2.5">
+                {messages.map((m) => (
                   <div
+                    key={m.id}
                     className={cn(
-                      "max-w-[85%] px-3.5 py-2.5 text-[13.5px] font-normal leading-[1.45]",
-                      m.role === "user"
-                        ? "bg-[#0D0F12] text-white"
-                        : "bg-white text-light-primary shadow-card"
+                      "flex",
+                      m.role === "user" ? "justify-end" : "justify-start"
                     )}
-                    style={{ borderRadius: 2 }}
                   >
-                    {m.text}
+                    <div
+                      className={cn(
+                        "max-w-[88%] px-3 py-2 text-[13.5px] font-normal leading-[1.45]",
+                        m.role === "user"
+                          ? "bg-[#0D0F12] text-white"
+                          : "border border-black/[0.04] bg-white text-light-primary shadow-card"
+                      )}
+                      style={{ borderRadius: 2 }}
+                    >
+                      {m.text}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            <div className="border-t border-black/[0.06] bg-white px-3 py-3">
-              <div className="flex flex-wrap gap-2">
+            <div className="shrink-0 border-t border-black/[0.06] bg-white px-3 py-2.5">
+              <div
+                className="flex flex-wrap gap-1.5"
+                role="group"
+                aria-label="Suggested replies"
+              >
                 {node.replies.map((reply) => (
                   <button
-                    key={reply.label}
+                    key={`${nodeId}-${reply.label}-${reply.next}`}
                     type="button"
                     onClick={() => onReply(reply.label, reply.next)}
-                    className="border border-black/[0.08] bg-[#f7f7f5] px-3 py-1.5 text-[12px] font-normal uppercase tracking-[0.06em] text-light-primary transition-colors hover:border-[#0D0F12]/25 hover:bg-black/[0.04] hover:text-[#0D0F12]"
+                    className="border border-black/[0.08] bg-[#f7f7f5] px-3 py-2 text-[13px] font-normal leading-snug text-light-primary transition-colors duration-200 hover:border-[#0D0F12]/20 hover:bg-black/[0.03] hover:text-[#0D0F12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0D0F12]/40 active:bg-black/[0.05]"
                     style={{ borderRadius: 2 }}
                   >
                     {reply.label}
@@ -162,20 +196,26 @@ export function AssistantWidget() {
         )}
       </AnimatePresence>
 
-      <motion.button
-        type="button"
-        aria-label={open ? "Close assistant" : "Open assistant"}
-        onClick={() => setOpen((v) => !v)}
-        whileTap={{ scale: 0.96 }}
-        className="pointer-events-auto flex h-14 w-14 items-center justify-center overflow-hidden bg-[#0D0F12] text-white shadow-[0_12px_32px_rgba(13,15,18,0.28)] transition-colors duration-200 hover:bg-black"
-        style={{ borderRadius: 2 }}
-      >
-        {open ? (
-          <X size={22} strokeWidth={1.75} />
-        ) : (
-          <Headphones size={24} strokeWidth={1.75} aria-hidden />
+      <AnimatePresence>
+        {!open && (
+          <motion.button
+            type="button"
+            aria-label="Open AJ Sourcing assistant"
+            aria-controls={panelId}
+            aria-expanded={false}
+            onClick={() => setOpen(true)}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
+            transition={{ duration: reducedMotion ? 0 : 0.2 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.96 }}
+            className="pointer-events-auto flex h-14 w-14 items-center justify-center overflow-hidden bg-[#0D0F12] text-white shadow-[0_12px_32px_rgba(13,15,18,0.28)] transition-colors duration-200 hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0D0F12]"
+            style={{ borderRadius: 2 }}
+          >
+            <Headphones size={24} strokeWidth={1.75} aria-hidden />
+          </motion.button>
         )}
-      </motion.button>
+      </AnimatePresence>
     </div>
   );
 }

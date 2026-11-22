@@ -18,15 +18,14 @@ export const chatNodes: Record<string, ChatNode> = {
   welcome: {
     id: "welcome",
     bot: [
-      "Hi. I’m the AJ Sourcing assistant.",
-      "I can help you get a quote, explain shipping terms, or walk you through how we work.",
+      "Hi there! 👋 I'm the AJ Sourcing assistant. What can I help you with today?",
     ],
     replies: [
-      { label: "I want a quote", next: "quote" },
+      { label: "Get a quote", next: "quote" },
       { label: "What can you source?", next: "source" },
-      { label: "Explain shipping terms", next: "shipping" },
-      { label: "Tell me how it works", next: "how" },
-      { label: "Email us", next: "email" },
+      { label: "How does it work?", next: "how" },
+      { label: "Shipping options", next: "shipping" },
+      { label: "Contact our team", next: "email" },
     ],
   },
   quote: {
@@ -37,13 +36,13 @@ export const chatNodes: Record<string, ChatNode> = {
     ],
     replies: [
       { label: "Open quote form", next: "open-quote" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   "open-quote": {
     id: "open-quote",
     bot: ["Opening the quote form for you…"],
-    replies: [{ label: "Back to menu", next: "welcome" }],
+    replies: [{ label: "Main topics", next: "welcome" }],
   },
   source: {
     id: "source",
@@ -52,9 +51,9 @@ export const chatNodes: Record<string, ChatNode> = {
       "Tell us the product, quantity, and destination, and we’ll match the right manufacturer.",
     ],
     replies: [
-      { label: siteConfig.primaryCta, next: "quote" },
+      { label: "Get a quote", next: "quote" },
       { label: "See services", next: "services" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   services: {
@@ -63,8 +62,8 @@ export const chatNodes: Record<string, ChatNode> = {
       "Our core support covers manufacturer sourcing, product coordination, quality inspection, freight, Pakistan delivery, and import support.",
     ],
     replies: [
-      { label: siteConfig.primaryCta, next: "quote" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Get a quote", next: "quote" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   shipping: {
@@ -78,14 +77,14 @@ export const chatNodes: Record<string, ChatNode> = {
     ],
     replies: [
       { label: "View shipping section", next: "go-shipping" },
-      { label: siteConfig.primaryCta, next: "quote" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Get a quote", next: "quote" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   "go-shipping": {
     id: "go-shipping",
     bot: ["Scrolling to Shipping Terms…"],
-    replies: [{ label: "Back to menu", next: "welcome" }],
+    replies: [{ label: "Main topics", next: "welcome" }],
   },
   how: {
     id: "how",
@@ -97,14 +96,14 @@ export const chatNodes: Record<string, ChatNode> = {
     ],
     replies: [
       { label: "See full process", next: "go-how" },
-      { label: siteConfig.primaryCta, next: "quote" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Get a quote", next: "quote" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   "go-how": {
     id: "go-how",
     bot: ["Scrolling to How It Works…"],
-    replies: [{ label: "Back to menu", next: "welcome" }],
+    replies: [{ label: "Main topics", next: "welcome" }],
   },
   email: {
     id: "email",
@@ -114,12 +113,12 @@ export const chatNodes: Record<string, ChatNode> = {
     replies: [
       { label: "Open email", next: "open-email" },
       { label: "Open quote form", next: "open-quote" },
-      { label: "Back to menu", next: "welcome" },
+      { label: "Main topics", next: "welcome" },
     ],
   },
   "open-email": {
     id: "open-email",
     bot: ["Opening your email app…"],
-    replies: [{ label: "Back to menu", next: "welcome" }],
+    replies: [{ label: "Main topics", next: "welcome" }],
   },
 };
