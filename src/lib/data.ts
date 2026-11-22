@@ -375,6 +375,11 @@ export const clients = [
     name: "The Bare Edit",
     logo: "/clients/the-bare-edit.svg",
   },
+  {
+    id: "creatives-pool",
+    name: "Creatives Pool",
+    logo: "/clients/creatives-pool.png",
+  },
 ];
 
 export const shippingOptions = [
