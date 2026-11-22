@@ -34,14 +34,18 @@ const cardThemes = [
   },
 ] as const;
 
-/** Desktop sticky offset only — never apply as `top` on mobile `relative` cards. */
+/**
+ * Same sticky offset as the original desktop stack.
+ * Applied with position:sticky on every breakpoint (never on relative).
+ */
 const STICKY_TOP = "max(5.5rem, calc(50vh - 13rem))";
 /** Previous card shrinks to this as the next one covers it. */
 const SCALE_TO = 0.88;
 
 /**
- * How It Works — sticky mid-page stack.
- * As the next card rises, the current one scales down slightly.
+ * How It Works — sticky card stack on mobile + desktop.
+ * Desktop visual tokens (offset, card layout, scale) stay the same;
+ * mobile now uses the same sticky + scale handoff instead of a flat list.
  */
 export function HowItWorksSection() {
   const { heading, subtext } = homepageCopy.howItWorks;
@@ -52,7 +56,6 @@ export function HowItWorksSection() {
     if (!stack) return;
 
     const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktopMq = window.matchMedia("(min-width: 768px)");
     const cards = Array.from(
       stack.querySelectorAll<HTMLElement>("[data-hiw-card]")
     );
@@ -64,7 +67,7 @@ export function HowItWorksSection() {
       panels.forEach((panel) => {
         if (!panel) return;
         panel.style.transformOrigin = "50% 50%";
-        panel.style.willChange = desktopMq.matches ? "transform" : "auto";
+        panel.style.willChange = "transform";
         panel.style.transform = "scale(1)";
         panel.style.opacity = "1";
       });
@@ -76,12 +79,6 @@ export function HowItWorksSection() {
 
     const update = () => {
       ticking = false;
-      // Sticky + scale is desktop-only — mobile uses a simple stacked layout.
-      if (!desktopMq.matches) {
-        resetPanels();
-        return;
-      }
-
       const reduce = reduceMq.matches;
       const vh = window.innerHeight;
       const startY = vh;
@@ -116,12 +113,11 @@ export function HowItWorksSection() {
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-    desktopMq.addEventListener("change", onScroll);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      desktopMq.removeEventListener("change", onScroll);
+      resetPanels();
     };
   }, []);
 
@@ -141,7 +137,7 @@ export function HowItWorksSection() {
 
         <div
           ref={stackRef}
-          className="relative mt-12 space-y-6 md:mt-14 md:space-y-8 lg:mt-16"
+          className="relative mt-10 flex flex-col gap-8 md:mt-14 md:gap-8 lg:mt-16"
         >
           {howItWorks.map((step, i) => {
             const theme = cardThemes[i] ?? cardThemes[0];
@@ -150,7 +146,7 @@ export function HowItWorksSection() {
               <article
                 key={step.step}
                 data-hiw-card
-                className="relative top-auto rounded-none md:sticky md:[top:var(--hiw-sticky-top)]"
+                className="sticky top-[var(--hiw-sticky-top)] rounded-none"
                 style={
                   {
                     zIndex: i + 1,
