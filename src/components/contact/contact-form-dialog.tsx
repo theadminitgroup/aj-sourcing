@@ -56,10 +56,21 @@ export function ContactFormDialog() {
         }),
       });
 
-      const json = (await res.json().catch(() => ({}))) as { error?: string };
+      const json = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        message?: string;
+        pendingActivation?: boolean;
+      };
 
       if (!res.ok) {
         throw new Error(json.error || "Something went wrong. Please try again.");
+      }
+
+      if (json.pendingActivation) {
+        throw new Error(
+          json.message ||
+            "Check ahmad@ahj.com.hk for a FormSubmit Activate email, click the link, then submit again."
+        );
       }
 
       trackMetaEvent("Lead");

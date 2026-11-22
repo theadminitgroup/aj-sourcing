@@ -18,6 +18,7 @@ function isValidEmail(email: string) {
 
 /** Free forever form → inbox relay (FormSubmit). No paid plan required. */
 const DEFAULT_INBOX = "ahmad@ahj.com.hk";
+const SITE_ORIGIN = "https://www.ajsourcing.com.hk";
 
 export async function POST(request: Request) {
   try {
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
     const toEmail = (process.env.CONTACT_TO_EMAIL ?? DEFAULT_INBOX).trim();
 
     // FormSubmit is free — delivers a copy of the enquiry to your inbox only.
+    // Origin/Referer required so FormSubmit accepts server-side relay.
     const res = await fetch(
       `https://formsubmit.co/ajax/${encodeURIComponent(toEmail)}`,
       {
@@ -51,6 +53,8 @@ export async function POST(request: Request) {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Origin: SITE_ORIGIN,
+          Referer: `${SITE_ORIGIN}/`,
         },
         body: JSON.stringify({
           name: fullName,
@@ -59,6 +63,7 @@ export async function POST(request: Request) {
           city: city || "—",
           country: country || "—",
           service: service || "—",
+          message: brief,
           brief,
           _subject: `New quote request from ${fullName}`,
           _template: "table",
@@ -73,10 +78,30 @@ export async function POST(request: Request) {
       message?: string;
     };
 
-    if (!res.ok) {
+    const success =
+      json.success === true || json.success === "true" || res.ok;
+    const needsActivation =
+      typeof json.message === "string" &&
+      json.message.toLowerCase().includes("activation");
+
+    if (needsActivation) {
+      // First-time setup: FormSubmit emailed an Activate link to the inbox.
+      return NextResponse.json({
+        ok: true,
+        pendingActivation: true,
+        message:
+          "Check ahmad@ahj.com.hk for a FormSubmit activation email and click the link, then submit again.",
+      });
+    }
+
+    if (!success || json.success === "false" || json.success === false) {
       console.error("FormSubmit error:", res.status, json);
       return NextResponse.json(
-        { error: "Failed to send enquiry. Please try again." },
+        {
+          error:
+            json.message ||
+            "Failed to send enquiry. Please try again.",
+        },
         { status: 502 }
       );
     }
