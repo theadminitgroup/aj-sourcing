@@ -12,6 +12,10 @@ export const siteConfig = {
     src: "/videos/aj-hero.mp4",
     poster: "/videos/aj-hero-poster.jpg",
   },
+  whyUsVideo: {
+    src: "/videos/aj-why-us.mp4",
+    poster: "/videos/aj-why-us-poster.jpg",
+  },
 };
 
 export const navLinks = [

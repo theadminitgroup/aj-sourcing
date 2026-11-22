@@ -8,11 +8,12 @@ import { cn } from "@/lib/utils";
 const HIGHLIGHT_MS = 3200;
 
 /**
- * Why AJ Sourcing — centered header; left feature cards + right video.
- * Cards highlight in turn on a delay (placeholder until video cues exist).
+ * Why AJ Sourcing — centered header; left feature cards + right looping ops video.
+ * Cards highlight in turn on a delay.
  */
 export function WhyUsSection() {
   const { heading, subtext } = homepageCopy.whyUs;
+  const { src: videoSrc, poster: videoPoster } = siteConfig.whyUsVideo;
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -116,13 +117,14 @@ export function WhyUsSection() {
             >
               <video
                 className="absolute inset-0 h-full w-full object-cover"
-                src={siteConfig.heroVideo.src}
-                poster={siteConfig.heroVideo.poster}
+                src={videoSrc}
+                poster={videoPoster}
                 autoPlay
                 muted
                 loop
                 playsInline
-                aria-label="AJ Sourcing operations placeholder video"
+                preload="metadata"
+                aria-label="AJ Sourcing operations video"
               />
             </div>
           </FadeUp>
