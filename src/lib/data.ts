@@ -16,9 +16,9 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "Home", href: "/", active: true },
-  { label: "About Us", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "How It Works", href: "#how-it-works" },
+  { label: "About Us", href: "/#about" },
+  { label: "Services", href: "/#services" },
+  { label: "How It Works", href: "/#how-it-works" },
 ];
 
 export const homepageCopy = {

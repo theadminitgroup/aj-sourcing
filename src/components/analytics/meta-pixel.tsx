@@ -1,29 +1,14 @@
-"use client";
-
 import Script from "next/script";
+import { META_PIXEL_ID } from "@/lib/meta-pixel";
 
-export const META_PIXEL_ID = "1064156553352167";
-
-declare global {
-  interface Window {
-    fbq?: (...args: unknown[]) => void;
-  }
-}
-
-/** Fire a standard Meta Pixel event (e.g. Lead after quote submit). */
-export function trackMetaEvent(
-  event: string,
-  params?: Record<string, string | number | boolean>
-) {
-  if (typeof window === "undefined" || typeof window.fbq !== "function") return;
-  if (params) window.fbq("track", event, params);
-  else window.fbq("track", event);
-}
-
+/**
+ * Meta Pixel base code — must live in a Server Component layout so
+ * next/script actually ships to production HTML.
+ */
 export function MetaPixel() {
   return (
     <>
-      <Script id="meta-pixel" strategy="afterInteractive">
+      <Script id="meta-pixel-base" strategy="beforeInteractive">
         {`
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?

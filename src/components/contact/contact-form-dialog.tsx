@@ -1,6 +1,6 @@
 "use client";
 
-import { trackMetaEvent } from "@/components/analytics/meta-pixel";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 import { useContact } from "@/components/contact/contact-context";
 import { Button } from "@/components/ui/button";
 import { contactFormServices, siteConfig } from "@/lib/data";
