@@ -85,7 +85,7 @@ export function AssistantWidget() {
   };
 
   return (
-    <div className="pointer-events-none fixed bottom-7 right-7 z-[90] flex flex-col items-end gap-3 md:bottom-9 md:right-9">
+    <div className="pointer-events-none fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-[90] flex flex-col items-end gap-3 md:bottom-9 md:right-9">
       <AnimatePresence>
         {open && (
           <motion.div
@@ -93,7 +93,7 @@ export function AssistantWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-auto flex h-[min(520px,70dvh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
+            className="pointer-events-auto flex h-[min(520px,min(70dvh,calc(100dvh-6.5rem)))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden border border-black/[0.06] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
             style={{ borderRadius: 2 }}
           >
             <div className="flex items-center justify-between gap-3 border-b border-black/[0.06] bg-[#0a0a0a] px-4 py-3.5 text-white">

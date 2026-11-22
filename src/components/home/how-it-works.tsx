@@ -50,7 +50,8 @@ export function HowItWorksSection() {
     const stack = stackRef.current;
     if (!stack) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktopMq = window.matchMedia("(min-width: 768px)");
     const cards = Array.from(
       stack.querySelectorAll<HTMLElement>("[data-hiw-card]")
     );
@@ -58,21 +59,32 @@ export function HowItWorksSection() {
       (card) => card.querySelector<HTMLElement>("[data-hiw-panel]")
     );
 
-    panels.forEach((panel) => {
-      if (!panel) return;
-      panel.style.transformOrigin = "50% 50%";
-      panel.style.willChange = "transform";
-      panel.style.transform = "scale(1)";
-    });
+    const resetPanels = () => {
+      panels.forEach((panel) => {
+        if (!panel) return;
+        panel.style.transformOrigin = "50% 50%";
+        panel.style.willChange = desktopMq.matches ? "transform" : "auto";
+        panel.style.transform = "scale(1)";
+        panel.style.opacity = "1";
+      });
+    };
+
+    resetPanels();
 
     let ticking = false;
 
     const update = () => {
       ticking = false;
+      // Sticky + scale is desktop-only — mobile uses a simple stacked layout.
+      if (!desktopMq.matches) {
+        resetPanels();
+        return;
+      }
+
+      const reduce = reduceMq.matches;
       const vh = window.innerHeight;
-      // Match sticky mid: shrink finishes when next card reaches ~center
-      const startY = vh; // next card top at viewport bottom → scale 1
-      const endY = vh * 0.45; // next card top near mid → scale SCALE_TO
+      const startY = vh;
+      const endY = vh * 0.45;
 
       cards.forEach((card, i) => {
         const next = cards[i + 1];
@@ -103,10 +115,12 @@ export function HowItWorksSection() {
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    desktopMq.addEventListener("change", onScroll);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      desktopMq.removeEventListener("change", onScroll);
     };
   }, []);
 
@@ -135,7 +149,7 @@ export function HowItWorksSection() {
               <article
                 key={step.step}
                 data-hiw-card
-                className="sticky rounded-none"
+                className="relative rounded-none md:sticky"
                 style={{
                   zIndex: i + 1,
                   top: STICKY_TOP,
@@ -146,8 +160,8 @@ export function HowItWorksSection() {
                   className={cn("overflow-hidden rounded-none", theme.surface)}
                   style={{ borderRadius: 4 }}
                 >
-                  <div className="grid min-h-[420px] grid-cols-1 md:min-h-[480px] lg:min-h-[520px] lg:grid-cols-2">
-                    <div className="flex flex-col justify-center px-7 py-10 sm:px-9 md:px-10 md:py-12 lg:px-12 xl:px-14">
+                  <div className="grid min-h-0 grid-cols-1 md:min-h-[480px] lg:min-h-[520px] lg:grid-cols-2">
+                    <div className="flex flex-col justify-center px-5 py-8 sm:px-9 sm:py-10 md:px-10 md:py-12 lg:px-12 xl:px-14">
                       <p
                         className={cn(
                           "text-[18px] tracking-[0.04em] md:text-[20px]",

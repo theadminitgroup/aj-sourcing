@@ -71,11 +71,16 @@ export function Hero() {
           <p className="mt-6 max-w-[560px] text-[16px] font-normal leading-[1.65] text-white/80 md:mt-7 md:text-[18px]">
             {subtext}
           </p>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3 md:mt-10 md:gap-4">
-            <QuoteButton variant="onDark" size="lg">
+          <div className="mt-9 flex w-full max-w-[420px] flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center md:mt-10 md:gap-4">
+            <QuoteButton variant="onDark" size="lg" className="w-full sm:w-auto">
               {ctas[0].label}
             </QuoteButton>
-            <ButtonLink href={ctas[1].href} variant="outlineOnDark" size="lg">
+            <ButtonLink
+              href={ctas[1].href}
+              variant="outlineOnDark"
+              size="lg"
+              className="w-full sm:w-auto"
+            >
               {ctas[1].label}
             </ButtonLink>
           </div>

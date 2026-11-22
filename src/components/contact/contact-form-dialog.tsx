@@ -103,7 +103,7 @@ export function ContactFormDialog() {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-end justify-center md:items-center md:p-6">
+        <div className="fixed inset-0 z-[100] flex items-end justify-center md:items-center md:p-6 pb-[env(safe-area-inset-bottom)]">
           <motion.button
             type="button"
             aria-label="Close contact form"

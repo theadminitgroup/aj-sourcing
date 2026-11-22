@@ -171,8 +171,11 @@ export function SiteFooter() {
 
         <div className="content-width section-x relative z-[1] mt-8 md:mt-10">
           <div className="border-t border-[#E8E8E8] pb-7 pt-5 md:pb-8 md:pt-6">
-            <div className="grid grid-cols-1 gap-2 text-[12px] text-[#8A8A8A] md:grid-cols-3 md:items-center md:gap-4 md:text-[13px]">
-              <p className="md:justify-self-start" style={{ fontWeight: 400 }}>
+            <div className="grid grid-cols-1 gap-3 text-[12px] text-[#8A8A8A] md:grid-cols-3 md:items-center md:gap-4 md:text-[13px]">
+              <p
+                className="max-w-[42ch] leading-[1.45] md:max-w-none md:justify-self-start"
+                style={{ fontWeight: 400 }}
+              >
                 {siteConfig.location}
               </p>
               <p

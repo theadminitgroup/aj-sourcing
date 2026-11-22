@@ -24,22 +24,22 @@ function MobileMenu({
 }) {
   const isDark = tone === "hero";
 
+  if (!open) return null;
+
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[60] transition-opacity duration-300 lg:hidden",
-        isDark ? "bg-[#0D0F12]/98" : "bg-white/97",
-        open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        "fixed inset-0 z-[60] lg:hidden",
+        isDark ? "bg-[#0D0F12]/98" : "bg-white/97"
       )}
       role="dialog"
       aria-modal="true"
-      aria-hidden={!open}
     >
       <button
         type="button"
         onClick={onClose}
         className={cn(
-          "absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center sm:right-5 md:right-7",
+          "absolute right-4 top-[max(1rem,env(safe-area-inset-top))] inline-flex h-11 w-11 items-center justify-center sm:right-5 md:right-7",
           isDark ? "text-white hover:bg-white/10" : "text-navy hover:bg-black/[0.04]"
         )}
         style={{ borderRadius: 2 }}
@@ -48,13 +48,13 @@ function MobileMenu({
         <X size={20} />
       </button>
 
-      <div className="flex h-full flex-col items-center justify-center gap-1 px-6 pt-16">
+      <div className="flex h-full flex-col items-center justify-center gap-1 px-6 pt-16 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             className={cn(
-              "px-4 py-3 text-[13px] font-normal uppercase tracking-[0.14em]",
+              "px-4 py-3.5 text-[13px] font-normal uppercase tracking-[0.14em]",
               isDark ? "text-white" : "text-navy"
             )}
             onClick={onClose}
